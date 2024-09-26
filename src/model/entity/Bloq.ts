@@ -1,8 +1,9 @@
-import { Locker } from "./Locker";
+import { UUID } from 'node:crypto';
+import { Locker } from './Locker';
 
 export class Bloq {
-    id: String;
-    title: String;
-    address: String;
-    lockers: Locker[];
+  id: UUID;
+  title: string;
+  address: string;
+  lockers: Locker[];
 }

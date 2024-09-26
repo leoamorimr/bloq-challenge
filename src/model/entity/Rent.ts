@@ -1,10 +1,10 @@
-import { RentSize } from "../enum/RentSize";
-import { RentStatus } from "../enum/RentStatus";
+import { RentSize } from '../enum/RentSize';
+import { RentStatus } from '../enum/RentStatus';
 
 export class Rent {
-    id: String;
-    lockerId: string;
-    weight: number;
-    size: RentSize;
-    status: RentStatus;
+  id: string;
+  lockerId: string;
+  weight: number;
+  size: RentSize;
+  status: RentStatus;
 }

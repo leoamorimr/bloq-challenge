@@ -1,8 +1,8 @@
-import { LockerStatus } from "../enum/LockerStatus";
+import { LockerStatus } from '../enum/LockerStatus';
 
 export class Locker {
-    id: String;
-    bloqId: String;
-    status: LockerStatus;
-    isOccupied: Boolean;
+  id: string;
+  bloqId: string;
+  status: LockerStatus;
+  isOccupied: boolean;
 }
