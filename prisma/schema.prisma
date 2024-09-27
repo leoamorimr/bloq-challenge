@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Bloq {
+  id      String   @id @default(uuid())
+  title   String
+  address String
+  lockers Locker[] // One-to-many relation
+}
+
+model Locker {
+  id     String @id @default(uuid())
+  code   String
+  bloqId String
+  bloq   Bloq   @relation(fields: [bloqId], references: [id])
+  Rent   Rent[]
+}
+
+model Rent {
+  id       String @id @default(uuid())
+  lockerId String
+  weight   Float
+  size     String
+  status   String
+  locker   Locker @relation(fields: [lockerId], references: [id])
+}
