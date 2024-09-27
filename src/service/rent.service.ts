@@ -1,4 +1,5 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { UUID } from 'node:crypto';
 import { RentCreateDto } from 'src/model/dto/rentCreate.dto';
 import { RentResponseDto } from 'src/model/dto/rentResponse.dto';
 import { RentEntity } from 'src/model/entities/rent.entity';
@@ -48,9 +49,9 @@ export class RentService {
     const newRent = await this.rentRepository.create(rentEntity)
       .then(async (rent) => {
         await this.lockerService.changeOccupied(rent.lockerId, true);
-        return await this.rentRepository.findOne(rent.id);
+        return await this.rentRepository.findOneOrThrow(rent.id);
       })
-      .catch((error) => { throw new InternalServerErrorException(`Error creating a new Rent`, error.stack) });
+      .catch((error) => { throw new InternalServerErrorException(`Error creating a new Rent`, error.message) });
 
     return new RentResponseDto(
       newRent.weight,
@@ -61,10 +62,16 @@ export class RentService {
     );
   }
 
-  async deposit(rent: RentCreateDto): Promise<any> {
-    console.log("RentService.deposit triggered");
 
-    throw new Error('Method not implemented.');
+  async deposit(rentId: UUID, rentDto: RentCreateDto): Promise<RentResponseDto> {
+    // Check if rent exists
+    const rentEntity = await this.rentRepository.findOneOrThrow(rentId)
+      .catch((error) => {
+        console.error(`Rent with id ${rentId} not found`,);
+        throw new NotFoundException(`Rent with id ${rentId} not found`, error.message)
+      });
+
+    return
   }
 
   async retrieve(rentId: string): Promise<any> {

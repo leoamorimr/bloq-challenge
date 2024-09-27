@@ -8,6 +8,7 @@ import { RentRepository } from "../rent.repository";
 export class PrismaRentRepository implements RentRepository {
     constructor(private readonly prisma: PrismaService) { }
 
+
     async create(rent: RentEntity): Promise<RentEntity> {
         return await this.prisma.rent.create({
             data: {
@@ -23,8 +24,8 @@ export class PrismaRentRepository implements RentRepository {
         });
     }
 
-    async findOne(rentId: string): Promise<RentEntity> {
-        return await this.prisma.rent.findUnique({
+    async findOneOrThrow(rentId: string): Promise<RentEntity> {
+        return await this.prisma.rent.findUniqueOrThrow({
             where: {
                 id: rentId
             },
@@ -32,5 +33,9 @@ export class PrismaRentRepository implements RentRepository {
                 locker: true
             }
         });
+    }
+
+    async exists(rentId: string): Promise<boolean> {
+        return await this.prisma.rent.findUnique({ where: { id: rentId } }) !== null;
     }
 }

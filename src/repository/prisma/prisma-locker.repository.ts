@@ -22,15 +22,12 @@ export class PrismaLockerRepository implements LockerRepository {
     }
 
     async exists(lockerId: UUID): Promise<boolean> {
-        const locker = await this.prisma.locker.findUnique({
+        return await this.prisma.locker.findUnique({
             where: {
                 id: lockerId,
             },
-        });
-
-        return locker !== null
+        }) !== null;
     }
-
 
     async isAvailable(lockerId: UUID): Promise<boolean> {
         const locker = await this.prisma.locker.findUnique({

@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Param,
+  ParseUUIDPipe,
   Patch,
   Post
 } from '@nestjs/common';
@@ -14,14 +16,14 @@ export class RentController {
   constructor(private readonly rentService: RentService) { }
 
   @Post('create')
-  createRent(@Body() rent: RentCreateDto): Promise<RentResponseDto> {
+  async createRent(@Body() rent: RentCreateDto): Promise<RentResponseDto> {
     console.log("RentController.deposit triggered");
-    return this.rentService.create(rent);
+    return await this.rentService.create(rent);
   }
 
-  @Patch('retrieve')
-  retrieve(rentId: UUID): any {
-    return this.rentService.retrieve(rentId);
+  @Patch('deposit/:rentId')
+  async retrieve(@Param('rentId', new ParseUUIDPipe()) rentId: UUID, @Body() rentDto: RentCreateDto): Promise<RentResponseDto> {
+    return await this.rentService.deposit(rentId, rentDto);
   }
 
 
