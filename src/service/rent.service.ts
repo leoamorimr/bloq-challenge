@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { UUID } from 'node:crypto';
 import { RentCreateDto } from 'src/model/dto/rentCreate.dto';
 import { RentResponseDto } from 'src/model/dto/rentResponse.dto';
@@ -11,11 +12,12 @@ import { LockerService } from './locker.service';
 export class RentService {
   constructor(
     private readonly rentRepository: RentRepository,
-    private readonly lockerService: LockerService
+    private readonly lockerService: LockerService,
+    @InjectPinoLogger(RentService.name) private readonly logger: PinoLogger
   ) { }
 
   async create(rentDto: RentCreateDto): Promise<RentResponseDto> {
-    console.log("Creating new rent");
+    this.logger.info("Creating new rent");
 
     // Convert DTO to entity
     const rentEntity = new RentEntity(
@@ -41,11 +43,11 @@ export class RentService {
 
     const lockerAvailable = await this.lockerService.isLockerAvailable(rentDto.lockerId);
     if (!lockerAvailable) {
-      console.error(`Locker ${rentDto.lockerId} is not available`);
+      this.logger.error(`Locker ${rentDto.lockerId} is not available`);
       throw new BadRequestException('Locker is not available');
     }
 
-    console.log("Creating new rent with locker");
+    this.logger.info("Creating new rent with locker");
     const newRent = await this.rentRepository.create(rentEntity)
       .then(async (rent) => {
         await this.lockerService.changeOccupied(rent.lockerId, true);
@@ -62,14 +64,15 @@ export class RentService {
     );
   }
 
-
   async deposit(rentId: UUID, rentDto: RentCreateDto): Promise<RentResponseDto> {
-    // Check if rent exists
+
     const rentEntity = await this.rentRepository.findOneOrThrow(rentId)
       .catch((error) => {
-        console.error(`Rent with id ${rentId} not found`,);
+        this.logger.error(`Rent with id ${rentId} not found`,);
         throw new NotFoundException(`Rent with id ${rentId} not found`, error.message)
       });
+
+
 
     return
   }

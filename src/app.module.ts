@@ -3,6 +3,7 @@ import { BloqController } from './controller/bloq.controller';
 import { LockerController } from './controller/locker.controller';
 import { RentController } from './controller/rent.controller';
 import { PrismaService } from './database/prisma.service';
+import { CustomLoggerModule } from './logger/logger.module';
 import { BloqRepository } from './repository/bloq.repository';
 import { LockerRepository } from './repository/locker.repository';
 import { PrismaBloqRepository } from './repository/prisma/prisma-bloq.repository';
@@ -14,6 +15,10 @@ import { LockerService } from './service/locker.service';
 import { RentService } from './service/rent.service';
 
 @Module({
+  imports: [
+    CustomLoggerModule,
+  ],
+
   controllers: [
     BloqController,
     LockerController,
@@ -29,11 +34,11 @@ import { RentService } from './service/rent.service';
     },
     {
       provide: LockerRepository,
-      useClass: PrismaLockerRepository //Dependency injection 
+      useClass: PrismaLockerRepository
     },
     {
       provide: RentRepository,
-      useClass: PrismaRentRepository //Dependency injection 
+      useClass: PrismaRentRepository
     },
     PrismaService
   ],
