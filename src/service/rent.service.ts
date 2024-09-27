@@ -47,7 +47,7 @@ export class RentService {
     console.log("Creating new rent with locker");
     const newRent = await this.rentRepository.create(rentEntity)
       .then(async (rent) => {
-        await this.lockerService.changeOccupied(rent.lockerId,, true);
+        await this.lockerService.changeOccupied(rent.lockerId, true);
         return await this.rentRepository.findOne(rent.id);
       })
       .catch((error) => { throw new InternalServerErrorException(`Error creating a new Rent`, error.stack) });
