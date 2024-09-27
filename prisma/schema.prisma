@@ -18,18 +18,19 @@ model Bloq {
 }
 
 model Locker {
-  id     String @id @default(uuid())
-  code   String
-  bloqId String
-  bloq   Bloq   @relation(fields: [bloqId], references: [id])
-  Rent   Rent[]
+  id         String  @id @default(uuid())
+  bloqId     String
+  status     String
+  isOccupied Boolean
+  bloq       Bloq    @relation(fields: [bloqId], references: [id])
+  rent       Rent[]
 }
 
 model Rent {
-  id       String @id @default(uuid())
-  lockerId String
-  weight   Float
+  id       String  @id @default(uuid())
+  lockerId String?
+  weight   Int
   size     String
   status   String
-  locker   Locker @relation(fields: [lockerId], references: [id])
+  locker   Locker? @relation(fields: [lockerId], references: [id])
 }

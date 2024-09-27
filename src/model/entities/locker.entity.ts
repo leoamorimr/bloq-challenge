@@ -1,15 +1,13 @@
-import { UUID } from 'crypto';
-import { LockerStatus } from '../enum/lockerStatus.enum';
-import { Bloq } from './bloq.entity';
+import { BloqEntity } from './bloq.entity';
 
-export class Locker {
-  id: UUID;
+export class LockerEntity {
+  id?: string;
 
-  bloqId: UUID;
+  bloqId: string;
 
-  status: LockerStatus;
+  status: string;
 
   isOccupied: boolean;
 
-  bloq: Bloq;
+  bloq?: BloqEntity;
 }

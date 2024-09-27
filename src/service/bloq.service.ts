@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BloqRequestDto } from 'src/model/dto/bloqCreate.dto';
 import { BloqResponseDto } from 'src/model/dto/bloqResponse.dto';
-import { Bloq } from 'src/model/entities/bloq.entity';
+import { BloqEntity } from 'src/model/entities/bloq.entity';
 import { BloqRepository } from 'src/repository/bloq.repository';
 
 @Injectable()
@@ -20,9 +20,10 @@ export class BloqService {
   // }
 
   async createBloq(bloq: BloqRequestDto): Promise<BloqResponseDto> {
-    const createdBloq = await this.bloqRepository.create(new Bloq(bloq.title, bloq.address));
-
-    return new BloqResponseDto(createdBloq);
+    console.log("Creating new bloq");
+    const createdBloq = await this.bloqRepository.create(new BloqEntity(bloq.title, bloq.address));
+    const bloqResponse = new BloqResponseDto(createdBloq.title, createdBloq.address, createdBloq.lockers);
+    return bloqResponse;
   }
 
   // async updateBloq(id: UUID, bloq: BloqRequestDto): Promise<BloqResponseDto> {

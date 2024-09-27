@@ -1,32 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { UUID } from 'node:crypto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { LockerRepository } from 'src/repository/locker.repository';
 
 @Injectable()
 export class LockerService {
-  constructor() { }
+  constructor(private readonly lockerRepository: LockerRepository) { }
 
-  get(): string {
-    //Implement logic here
-    return 'get';
+
+  async isLockerAvailable(lockerId: string): Promise<boolean> {
+    const lockerExist = await this.lockerExists(lockerId);
+
+    // Locker not found in DB
+    if (!lockerExist) {
+      throw new NotFoundException('Locker does not exist');
+    }
+
+    console.log(`Checking if locker: ${lockerId} is available`);
+    const isAvailable = await this.lockerRepository.isAvailable(lockerId);
+
+    return isAvailable;
   }
 
-  getOne(id: UUID): string {
-    //Implement logic here
-    return 'getOne';
+  async lockerExists(lockerId: string): Promise<boolean> {
+    console.log("Checking if locker exists");
+    return this.lockerRepository.exists(lockerId);
   }
 
-  create(lock: any): string {
-    //Implement logic here
-    return 'created';
+  async changeOccupied(lockerId: string, isOccupied: boolean): Promise<any> {
+    console.log(`Changing locker ${lockerId} occupied status to: ${isOccupied}`);
+    return this.lockerRepository.changeOccupied(lockerId, isOccupied);
   }
 
-  update(id: UUID, lock: any): string {
-    //Implement logic here
-    return 'updated';
-  }
 
-  delete(id: UUID): string {
-    //Implement logic here
-    return 'deleted';
-  }
 }

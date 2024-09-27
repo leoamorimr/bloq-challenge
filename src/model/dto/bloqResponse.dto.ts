@@ -1,14 +1,14 @@
-import { Bloq } from '../entities/bloq.entity';
-import { Locker } from '../entities/locker.entity';
+import { LockerEntity } from '../entities/locker.entity';
+import { LockerReponseDto } from './lockerResponse.dto';
 
 export class BloqResponseDto {
   title: string;
   address: string;
-  lockers: Locker[];
+  lockers?: LockerReponseDto[];
 
-  constructor(bloqEntity: Bloq) {
-    this.title = bloqEntity.title;
-    this.address = bloqEntity.address;
-    this.lockers = bloqEntity.lockers;
+  constructor(title: string, address: string, lockers?: LockerEntity[]) {
+    this.title = title;
+    this.address = address;
+    this.lockers = lockers;
   }
 }

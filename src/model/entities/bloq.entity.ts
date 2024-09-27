@@ -1,13 +1,13 @@
-import { Locker } from './locker.entity';
+import { LockerEntity } from './locker.entity';
 
-export class Bloq {
+export class BloqEntity {
   id?: string;
 
   title: string;
 
   address: string;
 
-  lockers?: Locker[];
+  lockers?: LockerEntity[];
 
   constructor(title: string, address: string) {
     this.title = title;

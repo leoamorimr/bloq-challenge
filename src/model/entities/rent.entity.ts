@@ -1,15 +1,23 @@
-import { RentSize } from '../enum/rentSize.enum';
-import { RentStatus } from '../enum/rentStatus.enum';
+import { LockerEntity } from "./locker.entity";
 
-export class Rent {
+export class RentEntity {
   id: string;
 
-  lockerId: string;
+  lockerId?: string;
 
   weight: number;
 
-  size: RentSize;
+  size: string;
 
-  status: RentStatus;
+  status: string;
+
+  locker?: LockerEntity
+
+  constructor(lockerId: string, weight: number, size: string, status: string) {
+    this.lockerId = lockerId;
+    this.weight = weight;
+    this.size = size;
+    this.status = status;
+  }
 
 }
