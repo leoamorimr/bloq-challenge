@@ -14,7 +14,7 @@ import { RentService } from 'src/service/rent.service';
 
 @Controller('rent')
 export class RentController {
-  constructor(private readonly rentService: RentService) {}
+  constructor(private readonly rentService: RentService) { }
 
   @Post('create')
   async createRent(@Body() rent: RentCreateDto): Promise<RentResponseDto> {

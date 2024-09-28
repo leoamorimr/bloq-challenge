@@ -7,7 +7,7 @@ import { LockerRepository } from '../locker.repository';
 
 @Injectable()
 export class PrismaLockerRepository implements LockerRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(locker: LockerEntity): Promise<LockerEntity> {
     return await this.prisma.locker.create({

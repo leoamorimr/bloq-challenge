@@ -7,7 +7,7 @@ import { RentRepository } from '../rent.repository';
 
 @Injectable()
 export class PrismaRentRepository implements RentRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(rent: RentEntity): Promise<RentEntity> {
     return await this.prisma.rent.create({
@@ -42,8 +42,6 @@ export class PrismaRentRepository implements RentRepository {
   }
 
   async update(rent: RentEntity): Promise<RentEntity> {
-    console.log(rent.status);
-
     // Omit null values
     const data = omitBy(
       {
@@ -59,10 +57,7 @@ export class PrismaRentRepository implements RentRepository {
       data,
       where: {
         id: rent.id,
-      },
-      include: {
-        locker: true,
-      },
+      }
     });
   }
 }

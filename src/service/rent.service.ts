@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { PinoLogger } from 'nestjs-pino';
 import { UUID } from 'node:crypto';
 import { RentCreateDto } from 'src/model/dto/rentCreate.dto';
 import { RentResponseDto } from 'src/model/dto/rentResponse.dto';
@@ -70,6 +70,7 @@ export class RentService {
       rentDto.weight,
       rentDto.size,
       rentDto.status,
+      rentId
     );
 
     const rentDb = await this.rentRepository
@@ -115,6 +116,6 @@ export class RentService {
   }
 
   async retrieve(rentId: string): Promise<any> {
-    throw new Error('Method not implemented.');
+
   }
 }
