@@ -42,7 +42,7 @@ export class PrismaRentRepository implements RentRepository {
     );
   }
 
-  async update(rent: RentEntity): Promise<RentEntity> {
+  async update(rentId: string, rent: RentEntity): Promise<RentEntity> {
     // Omit null values
     const data = omitBy(
       {

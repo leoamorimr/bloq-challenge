@@ -25,7 +25,7 @@ export class PrismaBloqRepository implements BloqRepository {
     });
   }
 
-  async update(bloq: BloqEntity): Promise<BloqEntity> {
+  async update(bloqId: string, bloq: BloqEntity): Promise<BloqEntity> {
     const data = omitBy(
       {
         title: bloq.title,

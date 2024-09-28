@@ -8,7 +8,7 @@ import { BloqService } from "src/service/bloq.service";
 import {
   fakeBloqRequestDto,
   fakeBloqResponseDto,
-} from "../../test/mock/bloq.dto";
+} from "../../test/mock/bloq";
 import { BloqController } from "./bloq.controller";
 
 describe("BloqController", () => {

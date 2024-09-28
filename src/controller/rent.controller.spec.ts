@@ -5,10 +5,7 @@ import { RentCreateDto } from "src/model/dto/rent-create.dto";
 import { RentResponseDto } from "src/model/dto/rent-response.dto";
 import { RentUpdateDto } from "src/model/dto/rent-update.dto";
 import { RentService } from "src/service/rent.service";
-import {
-  fakeRentRequestDto,
-  fakeRentResponseDto,
-} from "../../test/mock/rent.dto";
+import { fakeRentRequestDto, fakeRentResponseDto } from "../../test/mock/rent";
 import { RentController } from "./rent.controller";
 
 describe("RentController", () => {

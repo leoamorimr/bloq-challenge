@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { isNil, omitBy } from "lodash";
 import { PrismaService } from "src/database/prisma.service";
 import { fakeUUID } from "../../../test/mock/fake-locker";
-import { fakeRentEntity } from "../../../test/mock/rent.dto";
+import { fakeRentEntity } from "../../../test/mock/rent";
 import { PrismaRentRepository } from "./prisma-rent.repository";
 
 jest.mock("../../database/prisma.service");
@@ -61,7 +61,7 @@ describe("PrismaRentRepository", () => {
     it("should update a rent", async () => {
       prismaService.rent.update = jest.fn().mockResolvedValue(fakeRentEntity);
 
-      const result = await repository.update(fakeRentEntity);
+      const result = await repository.update(fakeUUID, fakeRentEntity);
       expect(result).toEqual(fakeRentEntity);
       expect(prismaService.rent.update).toHaveBeenCalledWith({
         data: omitBy(

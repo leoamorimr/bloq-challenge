@@ -1,6 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { isNil, omitBy } from "lodash";
 import { randomUUID } from "node:crypto";
+import { fakeUUID } from "../../../test/mock/fake-locker";
 import { PrismaService } from "../../database/prisma.service";
 import { BloqEntity } from "../../model/entity/bloq.entity";
 import { PrismaBloqRepository } from "./prisma-bloq.repository";
@@ -81,7 +82,7 @@ describe("PrismaBloqRepository", () => {
 
       prismaService.bloq.update = jest.fn().mockResolvedValue(updatedBloq);
 
-      const result = await repository.update(bloq);
+      const result = await repository.update(fakeUUID, bloq);
       expect(result).toEqual(updatedBloq);
       expect(prismaService.bloq.update).toHaveBeenCalledWith({
         data: omitBy({ title: bloq.title, address: bloq.address }, isNil),
