@@ -1,5 +1,5 @@
 import { BloqEntity } from '../entity/bloq.entity';
-import { LockerReponseDto } from './lockerResponse.dto';
+import { LockerReponseDto } from './locker-response.dto';
 
 export class BloqResponseDto {
   id?: string;
@@ -11,5 +11,6 @@ export class BloqResponseDto {
     this.title = bloq?.title;
     this.address = bloq?.address;
     this.lockers = bloq?.lockers;
+    this.id = bloq?.id;
   }
 }

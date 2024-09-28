@@ -5,6 +5,7 @@ import { PrismaService } from 'src/database/prisma.service';
 import { RentEntity } from 'src/model/entity/rent.entity';
 import { RentRepository } from '../rent.repository';
 
+
 @Injectable()
 export class PrismaRentRepository implements RentRepository {
   constructor(private readonly prisma: PrismaService) { }
@@ -57,7 +58,15 @@ export class PrismaRentRepository implements RentRepository {
       data,
       where: {
         id: rent.id,
-      }
+      },
+    });
+  }
+
+  async delete(rentId: string) {
+    return await this.prisma.rent.delete({
+      where: {
+        id: rentId,
+      },
     });
   }
 }

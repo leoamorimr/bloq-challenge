@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/database/prisma.service';
 import { LockerEntity } from 'src/model/entity/locker.entity';
-import { LockerStatus } from 'src/model/enum/lockerStatus.enum';
+import { LockerStatus } from 'src/model/enum/locker-status.enum';
 import { LockerRepository } from '../locker.repository';
 
 @Injectable()
 export class PrismaLockerRepository implements LockerRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(locker: LockerEntity): Promise<LockerEntity> {
     return await this.prisma.locker.create({

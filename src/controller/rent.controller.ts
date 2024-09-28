@@ -1,15 +1,15 @@
 import {
   Body,
   Controller,
-  Param,
-  ParseUUIDPipe,
+  Delete,
   Patch,
-  Post,
+  Post
 } from '@nestjs/common';
 import { UUID } from 'node:crypto';
-import { RentCreateDto } from 'src/model/dto/rentCreate.dto';
-import { RentResponseDto } from 'src/model/dto/rentResponse.dto';
-import { RentUpdateDto } from 'src/model/dto/rentUpdate.dto';
+import { Uuid } from 'src/decorator/uuid.decorator';
+import { RentCreateDto } from 'src/model/dto/rent-create.dto';
+import { RentResponseDto } from 'src/model/dto/rent-response.dto';
+import { RentUpdateDto } from 'src/model/dto/rent-update.dto';
 import { RentService } from 'src/service/rent.service';
 
 @Controller('rent')
@@ -18,15 +18,21 @@ export class RentController {
 
   @Post('create')
   async createRent(@Body() rent: RentCreateDto): Promise<RentResponseDto> {
-    console.log('RentController.deposit triggered');
     return await this.rentService.create(rent);
   }
 
-  @Patch('update/:rentId')
-  async update(
-    @Param('rentId', new ParseUUIDPipe()) rentId: UUID,
+  @Patch('deposit/:rentId')
+  async deposit(
+    @Uuid('rentId') rentId: UUID,
     @Body() rentDto: RentUpdateDto,
   ): Promise<RentResponseDto> {
-    return await this.rentService.update(rentId, rentDto);
+    return await this.rentService.deposit(rentId, rentDto);
+  }
+
+  @Delete('retrieve/:rentId')
+  async retrieve(
+    @Uuid('rentId') rentId: UUID,
+  ): Promise<object> {
+    return await this.rentService.retrieve(rentId);
   }
 }

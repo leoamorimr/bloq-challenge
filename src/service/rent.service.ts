@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { UUID } from 'node:crypto';
-import { RentCreateDto } from 'src/model/dto/rentCreate.dto';
-import { RentResponseDto } from 'src/model/dto/rentResponse.dto';
-import { RentUpdateDto } from 'src/model/dto/rentUpdate.dto';
+import { RentCreateDto } from 'src/model/dto/rent-create.dto';
+import { RentResponseDto } from 'src/model/dto/rent-response.dto';
+import { RentUpdateDto } from 'src/model/dto/rent-update.dto';
 import { RentEntity } from 'src/model/entity/rent.entity';
 import { RentRepository } from 'src/repository/rent.repository';
 import { LockerService } from './locker.service';
@@ -19,8 +19,9 @@ export class RentService {
     private readonly rentRepository: RentRepository,
     private readonly lockerService: LockerService,
     private readonly logger: PinoLogger,
-  ) { }
+  ) {}
 
+  // Method responsible to create a new rent and update locker status
   async create(rentDto: RentCreateDto): Promise<RentResponseDto> {
     this.logger.info('Creating new rent');
 
@@ -64,13 +65,17 @@ export class RentService {
     return new RentResponseDto(newRent);
   }
 
-  async update(rentId: UUID, rentDto: RentUpdateDto): Promise<RentResponseDto> {
+  // Method responsible to update a rent by its id and update locker status
+  async deposit(
+    rentId: UUID,
+    rentDto: RentUpdateDto,
+  ): Promise<RentResponseDto> {
     const updatedEntity = new RentEntity(
       rentDto.lockerId,
       rentDto.weight,
       rentDto.size,
       rentDto.status,
-      rentId
+      rentId,
     );
 
     const rentDb = await this.rentRepository
@@ -88,7 +93,7 @@ export class RentService {
       });
 
     if (rentDb.lockerId !== lockerDb.id) {
-      //Check if the new locker is available
+      // If locker changed
       const lockerAvailable = await this.lockerService.isLockerAvailable(
         rentDto.lockerId,
       );
@@ -115,7 +120,24 @@ export class RentService {
     return new RentResponseDto(updatedRent);
   }
 
-  async retrieve(rentId: string): Promise<any> {
+  //Method reponsible to retrieve a rent by its id and update locker status
+  async retrieve(rentId: string): Promise<object> {
+    const rentDb = await this.rentRepository
+      .findOneOrThrow(rentId)
+      .catch((error) => {
+        this.logger.error(`Rent with id ${rentId} not found`);
+        throw new NotFoundException(`Rent not found`, error.message);
+      });
 
+    //Remove rent from database
+    this.logger.info('Deleting rent');
+    await this.rentRepository.delete(rentId);
+
+    //Change locker status to available
+    this.logger.info('Changing locker status to available');
+    await this.lockerService.changeOccupied(rentDb.lockerId, false);
+
+    this.logger.info('Rent deleted successfully');
+    return { message: 'Rent retrieved successfully' };
   }
 }

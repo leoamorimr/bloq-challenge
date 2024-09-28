@@ -6,4 +6,6 @@ export abstract class RentRepository {
   abstract findOneOrThrow(rentId: string): Promise<RentEntity>;
 
   abstract update(rent: RentEntity): Promise<RentEntity>;
+
+  abstract delete(rentId: string);
 }

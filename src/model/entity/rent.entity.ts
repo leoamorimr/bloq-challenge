@@ -13,7 +13,13 @@ export class RentEntity {
 
   locker?: LockerEntity;
 
-  constructor(lockerId: string, weight: number, size: string, status: string, id?: string) {
+  constructor(
+    lockerId: string,
+    weight: number,
+    size: string,
+    status: string,
+    id?: string,
+  ) {
     this.lockerId = lockerId;
     this.weight = weight;
     this.size = size;
