@@ -39,7 +39,6 @@ export class RentService {
     // Save new rent without locker
     if (!rentDto.lockerId) {
       const newRent = await this.rentRepository.create(rentEntity);
-
       return new RentResponseDto(newRent);
     }
 

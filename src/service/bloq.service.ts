@@ -44,4 +44,13 @@ export class BloqService {
 
     return new BloqResponseDto(updatedBloq);
   }
+
+  async getBloqInfo(blockId: string): Promise<BloqEntity> {
+    this.logger.info('Getting bloq info');
+    return await this.bloqRepository
+      .findUniqueOrThrow(blockId)
+      .catch((error) => {
+        throw new NotFoundException('Bloq not found');
+      });
+  }
 }

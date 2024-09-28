@@ -16,6 +16,14 @@ export class BloqRepository {
     });
   }
 
+  async findUniqueOrThrow(bloqId: string): Promise<BloqEntity> {
+    return await this.prisma.bloq.findUniqueOrThrow({
+      where: {
+        id: bloqId,
+      },
+    });
+  }
+
   async update(bloq: BloqEntity): Promise<BloqEntity> {
     const data = omitBy(
       {

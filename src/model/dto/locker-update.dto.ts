@@ -4,7 +4,7 @@ import { LockerStatus } from '../enum/locker-status.enum';
 export class LockerUpdateDto {
   @IsOptional()
   @IsUUID()
-  blockId?: string;
+  bloqId?: string;
 
   @IsOptional()
   @IsEnum(LockerStatus)

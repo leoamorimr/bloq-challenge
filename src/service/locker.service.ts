@@ -5,16 +5,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
+import { LockerCreateDto } from 'src/model/dto/locker-create.dto';
 import { LockerReponseDto } from 'src/model/dto/locker-response.dto';
 import { LockerUpdateDto } from 'src/model/dto/locker-update.dto';
 import { LockerEntity } from 'src/model/entity/locker.entity';
 import { LockerStatus } from 'src/model/enum/locker-status.enum';
 import { LockerRepository } from 'src/repository/locker.repository';
+import { BloqService } from './bloq.service';
 
 @Injectable()
 export class LockerService {
   constructor(
     private readonly lockerRepository: LockerRepository,
+    private readonly bloqService: BloqService,
     private readonly logger: PinoLogger,
   ) {}
 
@@ -47,13 +50,12 @@ export class LockerService {
     lockerDto: LockerUpdateDto,
   ): Promise<LockerReponseDto> {
     const lockerEntity = new LockerEntity(
-      lockerDto?.blockId,
+      lockerDto?.bloqId,
       lockerDto?.status,
       lockerDto?.isOccupied,
       lockerId,
     );
 
-    //TODO: Extract this logic
     this.logger.info(`Checking if locker ${lockerId} exists`);
     if (!(await this.lockerExists(lockerId))) {
       this.logger.error(`Locker ${lockerId} does not exist`);
@@ -86,5 +88,30 @@ export class LockerService {
       });
 
     return new LockerReponseDto(updatedLocker);
+  }
+
+  async create(lockerDto: LockerCreateDto): Promise<LockerReponseDto> {
+    this.logger.info('Creating new Locker');
+
+    await this.bloqService.getBloqInfo(lockerDto.bloqId).catch((error) => {
+      throw error;
+    });
+
+    const createdLocker = await this.lockerRepository
+      .create(
+        new LockerEntity(
+          lockerDto.bloqId,
+          lockerDto.status,
+          lockerDto.isOccupied,
+        ),
+      )
+      .then(async (locker) => {
+        return await this.lockerRepository.findOneOrThrow(locker.id);
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    return new LockerReponseDto(createdLocker);
   }
 }
