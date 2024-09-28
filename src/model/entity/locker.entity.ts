@@ -10,4 +10,10 @@ export class LockerEntity {
   isOccupied: boolean;
 
   bloq?: BloqEntity;
+
+  constructor(bloqId: string, status: string, isOccupied: boolean) {
+    this.bloqId = bloqId;
+    this.status = status;
+    this.isOccupied = isOccupied;
+  }
 }

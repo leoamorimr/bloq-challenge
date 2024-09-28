@@ -14,7 +14,7 @@ model Bloq {
   id      String   @id @default(uuid())
   title   String
   address String
-  lockers Locker[] // One-to-many relation
+  lockers Locker[]
 }
 
 model Locker {

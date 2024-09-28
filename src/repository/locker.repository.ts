@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { isNil, omitBy } from 'lodash';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/database/prisma.service';
 import { LockerEntity } from 'src/model/entity/locker.entity';
@@ -68,6 +69,25 @@ export class LockerRepository {
     return await this.prisma.locker.findUniqueOrThrow({
       where: {
         id: lockerId,
+      },
+    });
+  }
+
+  async update(locker: LockerEntity): Promise<LockerEntity> {
+    // Omit null values
+    const data = omitBy(
+      {
+        bloqId: locker.bloqId,
+        status: locker.status,
+        isOccupied: locker.isOccupied,
+      },
+      isNil,
+    );
+
+    return await this.prisma.locker.update({
+      data,
+      where: {
+        id: locker.id,
       },
     });
   }
