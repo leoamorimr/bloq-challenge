@@ -3,7 +3,5 @@ import { LockerService } from 'src/service/locker.service';
 
 @Controller('locker')
 export class LockerController {
-  constructor(private readonly lockerService: LockerService) { }
-
-
+  constructor(private readonly lockerService: LockerService) {}
 }

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { PinoLogger } from 'nestjs-pino';
 import { LockerEntity } from 'src/model/entity/locker.entity';
 import { LockerRepository } from 'src/repository/locker.repository';
 

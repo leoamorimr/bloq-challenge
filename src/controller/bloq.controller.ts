@@ -8,7 +8,7 @@ import { BloqService } from 'src/service/bloq.service';
 
 @Controller('bloq')
 export class BloqController {
-  constructor(private readonly bloqService: BloqService) { }
+  constructor(private readonly bloqService: BloqService) {}
 
   @Post('create')
   async createBloq(@Body() bloq: BloqRequestDto): Promise<BloqResponseDto> {

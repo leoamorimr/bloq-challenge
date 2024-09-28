@@ -1,11 +1,71 @@
+import { Injectable } from '@nestjs/common';
+import { isNil, omitBy } from 'lodash';
+import { randomUUID } from 'node:crypto';
+import {} from 'prisma';
+import { PrismaService } from 'src/database/prisma.service';
 import { RentEntity } from 'src/model/entity/rent.entity';
 
-export abstract class RentRepository {
-  abstract create(locker: RentEntity): Promise<RentEntity>;
+@Injectable()
+export class RentRepository {
+  constructor(private readonly prisma: PrismaService) {}
 
-  abstract findOneOrThrow(rentId: string): Promise<RentEntity>;
+  async create(rent: RentEntity): Promise<RentEntity> {
+    return await this.prisma.rent.create({
+      data: {
+        id: randomUUID(),
+        lockerId: rent.lockerId,
+        weight: rent.weight,
+        size: rent.size,
+        status: rent.status,
+      },
+      include: {
+        locker: true,
+      },
+    });
+  }
 
-  abstract update(rent: RentEntity): Promise<RentEntity>;
+  async findOneOrThrow(rentId: string): Promise<RentEntity> {
+    return await this.prisma.rent.findUniqueOrThrow({
+      where: {
+        id: rentId,
+      },
+      include: {
+        locker: true,
+      },
+    });
+  }
 
-  abstract delete(rentId: string);
+  async exists(rentId: string): Promise<boolean> {
+    return (
+      (await this.prisma.rent.findUnique({ where: { id: rentId } })) !== null
+    );
+  }
+
+  async update(rent: RentEntity): Promise<RentEntity> {
+    // Omit null values
+    const data = omitBy(
+      {
+        lockerId: rent.lockerId,
+        weight: rent.weight,
+        size: rent.size,
+        status: rent.status,
+      },
+      isNil,
+    );
+
+    return await this.prisma.rent.update({
+      data,
+      where: {
+        id: rent.id,
+      },
+    });
+  }
+
+  async delete(rentId: string) {
+    return await this.prisma.rent.delete({
+      where: {
+        id: rentId,
+      },
+    });
+  }
 }

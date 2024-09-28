@@ -12,7 +12,7 @@ export class BloqService {
   constructor(
     private readonly bloqRepository: BloqRepository,
     private readonly logger: PinoLogger,
-  ) { }
+  ) {}
 
   async createBloq(bloq: BloqRequestDto): Promise<BloqResponseDto> {
     this.logger.info('Creating new bloq');
@@ -23,17 +23,21 @@ export class BloqService {
     return bloqResponse;
   }
 
-  async updateBloq(bloqId: UUID, bloqDto: BloqUpdateDto): Promise<BloqResponseDto> {
+  async updateBloq(
+    bloqId: UUID,
+    bloqDto: BloqUpdateDto,
+  ): Promise<BloqResponseDto> {
     const bloqExists = await this.bloqRepository.findOne(bloqId);
     if (!bloqExists) {
       this.logger.error(`Bloq ${bloqId} not found`);
       throw new NotFoundException(`Bloq not found`);
     }
 
-    const bloqEntity = new BloqEntity(bloqDto.title, bloqDto.address);
+    const bloqEntity = new BloqEntity(bloqDto.title, bloqDto.address, bloqId);
 
     this.logger.info(`Updating bloq ${bloqId}`);
-    const updatedBloq = await this.bloqRepository.update(bloqEntity)
+    const updatedBloq = await this.bloqRepository
+      .update(bloqEntity)
       .then(async (bloq) => {
         return await this.bloqRepository.findOne(bloqId);
       });
