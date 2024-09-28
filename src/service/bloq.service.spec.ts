@@ -3,7 +3,7 @@ import { PinoLogger } from 'nestjs-pino';
 import { BloqRequestDto } from 'src/model/dto/bloq-create.dto';
 import { BloqResponseDto } from 'src/model/dto/bloq-response.dto';
 import { BloqEntity } from 'src/model/entity/bloq.entity';
-import { BloqRepository } from 'src/repository/bloq.repository';
+import { BloqRepository } from 'src/repository/prisma/prisma-bloq.repository';
 import { BloqService } from './bloq.service';
 
 describe('BloqService', () => {

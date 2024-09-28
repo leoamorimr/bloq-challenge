@@ -15,9 +15,6 @@ import { LockerService } from './locker.service';
 
 @Injectable()
 export class RentService {
-  getRents(): RentResponseDto[] | PromiseLike<RentResponseDto[]> {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     private readonly rentRepository: RentRepository,
     private readonly lockerService: LockerService,

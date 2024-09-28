@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Patch, Post } from '@nestjs/common';
 import { UUID } from 'node:crypto';
 import { Uuid } from 'src/decorator/uuid.decorator';
 import { RentCreateDto } from 'src/model/dto/rent-create.dto';
@@ -9,11 +9,6 @@ import { RentService } from 'src/service/rent.service';
 @Controller('rent')
 export class RentController {
   constructor(private readonly rentService: RentService) {}
-
-  @Get()
-  async getRents(): Promise<RentResponseDto[]> {
-    return await this.rentService.getRents();
-  }
 
   @Post('create')
   async createRent(@Body() rent: RentCreateDto): Promise<RentResponseDto> {

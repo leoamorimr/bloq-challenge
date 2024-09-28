@@ -6,6 +6,9 @@ import { DbModule } from './database/db.module';
 import { CustomLoggerModule } from './logger/logger.module';
 import { BloqRepository } from './repository/bloq.repository';
 import { LockerRepository } from './repository/locker.repository';
+import { PrismaBloqRepository } from './repository/prisma/prisma-bloq.repository';
+import { PrismaLockerRepository } from './repository/prisma/prisma-locker.repository';
+import { PrismaRentRepository } from './repository/prisma/prisma-rent.repository';
 import { RentRepository } from './repository/rent.repository';
 import { BloqService } from './service/bloq.service';
 import { LockerService } from './service/locker.service';
@@ -20,9 +23,18 @@ import { RentService } from './service/rent.service';
     BloqService,
     LockerService,
     RentService,
-    BloqRepository,
-    LockerRepository,
-    RentRepository,
+    {
+      provide: BloqRepository,
+      useClass: PrismaBloqRepository,
+    },
+    {
+      provide: LockerRepository,
+      useClass: PrismaLockerRepository,
+    },
+    {
+      provide: RentRepository,
+      useClass: PrismaRentRepository,
+    },
   ],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/database/prisma.service';
 import { BloqEntity } from 'src/model/entity/bloq.entity';
-import { PrismaBloqRepository } from './bloq.repository';
+import { PrismaBloqRepository } from './prisma-bloq.repository';
 
 describe('PrismaBloqRepository', () => {
   let repository: PrismaBloqRepository;
