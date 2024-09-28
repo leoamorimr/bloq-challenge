@@ -1,53 +1,107 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { isNil, omitBy } from "lodash";
 import { randomUUID } from "node:crypto";
-import { PrismaService } from "src/database/prisma.service";
-import { BloqEntity } from "src/model/entity/bloq.entity";
+import { PrismaService } from "../../database/prisma.service";
+import { BloqEntity } from "../../model/entity/bloq.entity";
 import { PrismaBloqRepository } from "./prisma-bloq.repository";
+
+jest.mock("../../database/prisma.service");
 
 describe("PrismaBloqRepository", () => {
   let repository: PrismaBloqRepository;
-  let prismaService: PrismaService;
+  let prismaService: jest.Mocked<PrismaService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        PrismaBloqRepository,
-        {
-          provide: PrismaService,
-          useValue: {
-            bloq: {
-              create: jest.fn(),
-            },
-          },
-        },
-      ],
+      providers: [PrismaBloqRepository, PrismaService],
     }).compile();
 
     repository = module.get<PrismaBloqRepository>(PrismaBloqRepository);
-    prismaService = module.get<PrismaService>(PrismaService);
+    prismaService = module.get<PrismaService>(
+      PrismaService,
+    ) as jest.Mocked<PrismaService>;
+
+    Object.defineProperty(prismaService, "bloq", {
+      value: {
+        findUnique: jest.fn(),
+        findUniqueOrThrow: jest.fn(),
+        update: jest.fn(),
+        create: jest.fn(),
+      },
+      writable: true,
+    });
   });
 
-  it("should be defined", () => {
-    expect(repository).toBeDefined();
+  describe("findOne", () => {
+    it("should find a bloq by ID", async () => {
+      const bloqId = "some-uuid";
+      const bloq: BloqEntity = {
+        id: bloqId,
+        title: "Test Title",
+        address: "Test Address",
+      };
+
+      prismaService.bloq.findUnique = jest.fn().mockResolvedValue(bloq);
+
+      const result = await repository.findOne(bloqId);
+      expect(result).toEqual(bloq);
+      expect(prismaService.bloq.findUnique).toHaveBeenCalledWith({
+        where: { id: bloqId },
+      });
+    });
+  });
+
+  describe("findUniqueOrThrow", () => {
+    it("should find a bloq by ID or throw an error", async () => {
+      const bloqId = "some-uuid";
+      const bloq: BloqEntity = {
+        id: bloqId,
+        title: "Test Title",
+        address: "Test Address",
+      };
+
+      prismaService.bloq.findUniqueOrThrow = jest.fn().mockResolvedValue(bloq);
+
+      const result = await repository.findUniqueOrThrow(bloqId);
+      expect(result).toEqual(bloq);
+      expect(prismaService.bloq.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: { id: bloqId },
+      });
+    });
+  });
+
+  describe("update", () => {
+    it("should update a bloq", async () => {
+      const bloq: BloqEntity = {
+        id: "some-uuid",
+        title: "Updated Title",
+        address: "Updated Address",
+      };
+      const updatedBloq: BloqEntity = { ...bloq };
+
+      prismaService.bloq.update = jest.fn().mockResolvedValue(updatedBloq);
+
+      const result = await repository.update(bloq);
+      expect(result).toEqual(updatedBloq);
+      expect(prismaService.bloq.update).toHaveBeenCalledWith({
+        data: omitBy({ title: bloq.title, address: bloq.address }, isNil),
+        where: { id: bloq.id },
+      });
+    });
   });
 
   describe("create", () => {
     it("should create a new bloq", async () => {
       const bloq: BloqEntity = {
-        id: randomUUID(),
-        title: "Test Title",
-        address: "Test Address",
+        id: "some-uuid",
+        title: "New Title",
+        address: "New Address",
       };
+      const createdBloq: BloqEntity = { ...bloq, id: randomUUID() };
 
-      const createdBloq = {
-        ...bloq,
-        id: expect.any(String),
-      };
-
-      jest.spyOn(prismaService.bloq, "create").mockResolvedValue(createdBloq);
+      prismaService.bloq.create = jest.fn().mockResolvedValue(createdBloq);
 
       const result = await repository.create(bloq);
-
       expect(result).toEqual(createdBloq);
       expect(prismaService.bloq.create).toHaveBeenCalledWith({
         data: {
