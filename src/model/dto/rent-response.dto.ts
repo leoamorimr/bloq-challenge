@@ -1,7 +1,7 @@
-import { toRentStatus } from 'src/model/enum/rent-status.enum';
-import { RentEntity } from '../entity/rent.entity';
-import { RentStatus } from '../enum/rent-status.enum';
-import { LockerReponseDto } from './locker-response.dto';
+import { toRentStatus } from "src/model/enum/rent-status.enum";
+import { RentEntity } from "../entity/rent.entity";
+import { RentStatus } from "../enum/rent-status.enum";
+import { LockerReponseDto } from "./locker-response.dto";
 
 export class RentResponseDto {
   id?: string;

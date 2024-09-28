@@ -1,5 +1,5 @@
-import { IsBoolean, IsEnum, IsNotEmpty, IsUUID } from 'class-validator';
-import { LockerStatus } from '../enum/locker-status.enum';
+import { IsBoolean, IsEnum, IsNotEmpty, IsUUID } from "class-validator";
+import { LockerStatus } from "../enum/locker-status.enum";
 
 export class LockerCreateDto {
   @IsNotEmpty()

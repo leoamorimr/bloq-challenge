@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PinoLogger } from 'nestjs-pino';
-import { UUID } from 'node:crypto';
-import { BloqRequestDto } from 'src/model/dto/bloq-create.dto';
-import { BloqResponseDto } from 'src/model/dto/bloq-response.dto';
-import { BloqUpdateDto } from 'src/model/dto/bloq-update.dto';
-import { BloqEntity } from 'src/model/entity/bloq.entity';
-import { BloqRepository } from 'src/repository/bloq.repository';
+import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
+import { PinoLogger } from "nestjs-pino";
+import { UUID } from "node:crypto";
+import { BloqRequestDto } from "src/model/dto/bloq-create.dto";
+import { BloqResponseDto } from "src/model/dto/bloq-response.dto";
+import { BloqUpdateDto } from "src/model/dto/bloq-update.dto";
+import { BloqEntity } from "src/model/entity/bloq.entity";
+import { BloqRepository } from "src/repository/bloq.repository";
 
 @Injectable()
 export class BloqService {
@@ -14,8 +14,8 @@ export class BloqService {
     private readonly logger: PinoLogger,
   ) {}
 
-  async createBloq(bloq: BloqRequestDto): Promise<BloqResponseDto> {
-    this.logger.info('Creating new bloq');
+  async create(bloq: BloqRequestDto): Promise<BloqResponseDto> {
+    this.logger.info("Creating new bloq");
     const createdBloq = await this.bloqRepository.create(
       new BloqEntity(bloq.title, bloq.address),
     );
@@ -23,15 +23,14 @@ export class BloqService {
     return bloqResponse;
   }
 
-  async updateBloq(
+  async update(
     bloqId: UUID,
     bloqDto: BloqUpdateDto,
-  ): Promise<BloqResponseDto> {
-    const bloqExists = await this.bloqRepository.findOne(bloqId);
-    if (!bloqExists) {
+  ): Promise<BloqResponseDto | HttpException> {
+    await this.bloqRepository.findUniqueOrThrow(bloqId).catch(() => {
       this.logger.error(`Bloq ${bloqId} not found`);
       throw new NotFoundException(`Bloq not found`);
-    }
+    });
 
     const bloqEntity = new BloqEntity(bloqDto.title, bloqDto.address, bloqId);
 
@@ -45,12 +44,10 @@ export class BloqService {
     return new BloqResponseDto(updatedBloq);
   }
 
-  async getBloqInfo(blockId: string): Promise<BloqEntity> {
-    this.logger.info('Getting bloq info');
-    return await this.bloqRepository
-      .findUniqueOrThrow(blockId)
-      .catch((error) => {
-        throw new NotFoundException('Bloq not found');
-      });
+  async get(blockId: string): Promise<BloqEntity | HttpException> {
+    this.logger.info("Getting bloq info");
+    return await this.bloqRepository.findUniqueOrThrow(blockId).catch(() => {
+      throw new NotFoundException("Bloq not found");
+    });
   }
 }

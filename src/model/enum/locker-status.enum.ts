@@ -1,6 +1,6 @@
 export enum LockerStatus {
-  OPEN = 'OPEN',
-  CLOSED = 'CLOSED',
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
 }
 
 export function toLockerStatus(status: string): LockerStatus | undefined {

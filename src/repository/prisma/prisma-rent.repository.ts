@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { isNil, omitBy } from 'lodash';
-import { randomUUID } from 'node:crypto';
-import {} from 'prisma';
-import { PrismaService } from 'src/database/prisma.service';
-import { RentEntity } from 'src/model/entity/rent.entity';
-import { RentRepository } from '../rent.repository';
+import { Injectable } from "@nestjs/common";
+import { isNil, omitBy } from "lodash";
+import { randomUUID } from "node:crypto";
+import {} from "prisma";
+import { PrismaService } from "src/database/prisma.service";
+import { RentEntity } from "src/model/entity/rent.entity";
+import { RentRepository } from "../rent.repository";
 
 @Injectable()
 export class PrismaRentRepository implements RentRepository {

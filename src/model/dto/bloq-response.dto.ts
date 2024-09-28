@@ -1,5 +1,5 @@
-import { BloqEntity } from '../entity/bloq.entity';
-import { LockerReponseDto } from './locker-response.dto';
+import { BloqEntity } from "../entity/bloq.entity";
+import { LockerReponseDto } from "./locker-response.dto";
 
 export class BloqResponseDto {
   id?: string;

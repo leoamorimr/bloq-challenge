@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { isNil, omitBy } from 'lodash';
-import { randomUUID } from 'node:crypto';
-import { PrismaService } from 'src/database/prisma.service';
-import { BloqEntity } from 'src/model/entity/bloq.entity';
-import { BloqRepository } from 'src/repository/bloq.repository';
+import { Injectable } from "@nestjs/common";
+import { isNil, omitBy } from "lodash";
+import { randomUUID } from "node:crypto";
+import { PrismaService } from "src/database/prisma.service";
+import { BloqEntity } from "src/model/entity/bloq.entity";
+import { BloqRepository } from "src/repository/bloq.repository";
 
 @Injectable()
 export class PrismaBloqRepository implements BloqRepository {

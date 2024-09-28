@@ -1,4 +1,4 @@
-import { LockerEntity } from 'src/model/entity/locker.entity';
+import { LockerEntity } from "src/model/entity/locker.entity";
 
 export abstract class LockerRepository {
   abstract create(locker: LockerEntity): Promise<LockerEntity>;
@@ -9,5 +9,8 @@ export abstract class LockerRepository {
     isOccupied: boolean,
   ): Promise<LockerEntity>;
   abstract findOneOrThrow(lockerId: string): Promise<LockerEntity>;
-  abstract update(locker: LockerEntity): Promise<LockerEntity>;
+  abstract update(
+    lockerId: string,
+    locker: LockerEntity,
+  ): Promise<LockerEntity>;
 }

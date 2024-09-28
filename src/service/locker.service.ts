@@ -3,15 +3,15 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from '@nestjs/common';
-import { PinoLogger } from 'nestjs-pino';
-import { LockerCreateDto } from 'src/model/dto/locker-create.dto';
-import { LockerReponseDto } from 'src/model/dto/locker-response.dto';
-import { LockerUpdateDto } from 'src/model/dto/locker-update.dto';
-import { LockerEntity } from 'src/model/entity/locker.entity';
-import { LockerStatus } from 'src/model/enum/locker-status.enum';
-import { LockerRepository } from 'src/repository/locker.repository';
-import { BloqService } from './bloq.service';
+} from "@nestjs/common";
+import { PinoLogger } from "nestjs-pino";
+import { LockerCreateDto } from "src/model/dto/locker-create.dto";
+import { LockerReponseDto } from "src/model/dto/locker-response.dto";
+import { LockerUpdateDto } from "src/model/dto/locker-update.dto";
+import { LockerEntity } from "src/model/entity/locker.entity";
+import { LockerStatus } from "src/model/enum/locker-status.enum";
+import { LockerRepository } from "src/repository/locker.repository";
+import { BloqService } from "./bloq.service";
 
 @Injectable()
 export class LockerService {
@@ -28,39 +28,43 @@ export class LockerService {
     return isAvailable;
   }
 
-  async lockerExists(lockerId: string): Promise<boolean> {
-    this.logger.info('Checking if locker exists');
-    return await this.lockerRepository.exists(lockerId);
+  async lockerExists(lockerId: string): Promise<boolean | NotFoundException> {
+    this.logger.info("Checking if locker exists");
+    if (!(await this.lockerRepository.exists(lockerId))) {
+      this.logger.error(`Locker ${lockerId} does not exist`);
+      throw new NotFoundException("Locker does not exist");
+    }
+    return true;
   }
 
-  async changeOccupied(lockerId: string, isOccupied?: boolean): Promise<any> {
+  async changeOccupied(
+    lockerId: string,
+    isOccupied?: boolean,
+  ): Promise<LockerEntity> {
     this.logger.info(
       `Changing locker ${lockerId} occupied status to: ${isOccupied}`,
     );
     return await this.lockerRepository.changeOccupied(lockerId, isOccupied);
   }
 
-  async getLockerInfo(lockerId: string): Promise<LockerEntity> {
-    this.logger.info('Getting locker info');
+  async findOneOrThrow(lockerId: string): Promise<LockerEntity> {
+    this.logger.info("Getting locker info");
     return await this.lockerRepository.findOneOrThrow(lockerId);
   }
 
   async update(
     lockerId: string,
     lockerDto: LockerUpdateDto,
-  ): Promise<LockerReponseDto> {
+  ): Promise<LockerReponseDto | Error> {
     const lockerEntity = new LockerEntity(
       lockerDto?.bloqId,
       lockerDto?.status,
       lockerDto?.isOccupied,
-      lockerId,
     );
 
-    this.logger.info(`Checking if locker ${lockerId} exists`);
-    if (!(await this.lockerExists(lockerId))) {
-      this.logger.error(`Locker ${lockerId} does not exist`);
-      throw new NotFoundException('Locker does not exist');
-    }
+    await this.lockerExists(lockerId).catch((error) => {
+      throw error;
+    });
 
     const isLockerAvailable =
       lockerDto.isOccupied === false || lockerDto.status === LockerStatus.OPEN;
@@ -69,13 +73,13 @@ export class LockerService {
     if (isLockerAvailable && !(await this.isLockerAvailable(lockerId))) {
       this.logger.error(`Locker ${lockerId} is not available`);
       throw new BadRequestException(
-        'Locker is occupied. Please retrieve it first',
+        "Locker is occupied. Please retrieve it first",
       );
     }
 
     this.logger.info(`Updating locker`);
     const updatedLocker = await this.lockerRepository
-      .update(lockerEntity)
+      .update(lockerId, lockerEntity)
       .then(async (locker) => {
         await this.changeOccupied(locker.id, lockerDto?.isOccupied);
         return await this.lockerRepository.findOneOrThrow(locker.id);
@@ -91,9 +95,8 @@ export class LockerService {
   }
 
   async create(lockerDto: LockerCreateDto): Promise<LockerReponseDto> {
-    this.logger.info('Creating new Locker');
-
-    await this.bloqService.getBloqInfo(lockerDto.bloqId).catch((error) => {
+    this.logger.info("Creating new Locker");
+    await this.bloqService.get(lockerDto.bloqId).catch((error) => {
       throw error;
     });
 

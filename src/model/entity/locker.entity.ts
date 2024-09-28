@@ -1,4 +1,4 @@
-import { BloqEntity } from './bloq.entity';
+import { BloqEntity } from "./bloq.entity";
 
 export class LockerEntity {
   id?: string;

@@ -1,17 +1,18 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from '@nestjs/common';
-import { PinoLogger } from 'nestjs-pino';
-import { UUID } from 'node:crypto';
-import { RentCreateDto } from 'src/model/dto/rent-create.dto';
-import { RentResponseDto } from 'src/model/dto/rent-response.dto';
-import { RentUpdateDto } from 'src/model/dto/rent-update.dto';
-import { RentEntity } from 'src/model/entity/rent.entity';
-import { RentRepository } from 'src/repository/rent.repository';
-import { LockerService } from './locker.service';
+} from "@nestjs/common";
+import { PinoLogger } from "nestjs-pino";
+import { UUID } from "node:crypto";
+import { RentCreateDto } from "src/model/dto/rent-create.dto";
+import { RentResponseDto } from "src/model/dto/rent-response.dto";
+import { RentUpdateDto } from "src/model/dto/rent-update.dto";
+import { RentEntity } from "src/model/entity/rent.entity";
+import { RentRepository } from "src/repository/rent.repository";
+import { LockerService } from "./locker.service";
 
 @Injectable()
 export class RentService {
@@ -23,7 +24,7 @@ export class RentService {
 
   // Method responsible to create a new rent and update locker status
   async create(rentDto: RentCreateDto): Promise<RentResponseDto> {
-    this.logger.info('Creating new rent');
+    this.logger.info("Creating new rent");
 
     // Convert DTO to entity
     const rentEntity = new RentEntity(
@@ -44,10 +45,10 @@ export class RentService {
     );
     if (!lockerAvailable) {
       this.logger.error(`Locker ${rentDto.lockerId} is not available`);
-      throw new BadRequestException('Locker is not available');
+      throw new BadRequestException("Locker is not available");
     }
 
-    this.logger.info('Creating new rent with locker');
+    this.logger.info("Creating new rent with locker");
     const newRent = await this.rentRepository
       .create(rentEntity)
       .then(async (rent) => {
@@ -68,7 +69,7 @@ export class RentService {
   async deposit(
     rentId: UUID,
     rentDto: RentUpdateDto,
-  ): Promise<RentResponseDto> {
+  ): Promise<RentResponseDto | HttpException> {
     const updatedEntity = new RentEntity(
       rentDto.lockerId,
       rentDto.weight,
@@ -81,14 +82,14 @@ export class RentService {
       .findOneOrThrow(rentId)
       .catch((error) => {
         this.logger.error(`Rent with id ${rentId} not found`);
-        throw new NotFoundException(`Rent not found`, error.message);
+        throw new NotFoundException(`Rent not found`);
       });
 
     const lockerDb = await this.lockerService
-      .getLockerInfo(rentDto.lockerId)
-      .catch((error) => {
+      .findOneOrThrow(rentDto.lockerId)
+      .catch(() => {
         this.logger.error(`Locker with id ${rentDto.lockerId} not found`);
-        throw new NotFoundException(`Locker not found`, error.message);
+        throw new NotFoundException("Locker not found");
       });
 
     if (rentDb.lockerId !== lockerDb.id) {
@@ -98,11 +99,11 @@ export class RentService {
       );
       if (!lockerAvailable) {
         this.logger.error(`Locker ${rentDto.lockerId} is not available`);
-        throw new BadRequestException('Locker is not available');
+        throw new BadRequestException("Locker is not available");
       }
     }
 
-    this.logger.info('Updating rent');
+    this.logger.info("Updating rent");
     const updatedRent = await this.rentRepository
       .update(updatedEntity)
       .then(async (rent) => {
@@ -111,7 +112,7 @@ export class RentService {
       })
       .catch((error) => {
         throw new InternalServerErrorException(
-          `Error updating Rent`,
+          "Error updating Rent",
           error.message,
         );
       });
@@ -120,23 +121,23 @@ export class RentService {
   }
 
   //Method reponsible to retrieve a rent by its id and update locker status
-  async retrieve(rentId: string): Promise<object> {
+  async retrieve(rentId: string): Promise<object | HttpException> {
     const rentDb = await this.rentRepository
       .findOneOrThrow(rentId)
-      .catch((error) => {
+      .catch(() => {
         this.logger.error(`Rent with id ${rentId} not found`);
-        throw new NotFoundException(`Rent not found`, error.message);
+        throw new NotFoundException(`Rent not found`);
       });
 
     //Remove rent from database
-    this.logger.info('Deleting rent');
+    this.logger.info("Deleting rent");
     await this.rentRepository.delete(rentId);
 
     //Change locker status to available
-    this.logger.info('Changing locker status to available');
+    this.logger.info("Changing locker status to available");
     await this.lockerService.changeOccupied(rentDb.lockerId, false);
 
-    this.logger.info('Rent deleted successfully');
-    return { message: 'Rent retrieved successfully' };
+    this.logger.info("Rent deleted successfully");
+    return { message: "Rent retrieved successfully" };
   }
 }

@@ -1,4 +1,4 @@
-import { LockerEntity } from './locker.entity';
+import { LockerEntity } from "./locker.entity";
 
 export class RentEntity {
   id: string;

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { isNil, omitBy } from 'lodash';
-import { randomUUID } from 'node:crypto';
-import { PrismaService } from 'src/database/prisma.service';
-import { LockerEntity } from 'src/model/entity/locker.entity';
-import { LockerStatus } from 'src/model/enum/locker-status.enum';
-import { LockerRepository } from '../locker.repository';
+import { Injectable } from "@nestjs/common";
+import { isNil, omitBy } from "lodash";
+import { randomUUID } from "node:crypto";
+import { PrismaService } from "src/database/prisma.service";
+import { LockerEntity } from "src/model/entity/locker.entity";
+import { LockerStatus } from "src/model/enum/locker-status.enum";
+import { LockerRepository } from "../locker.repository";
 
 @Injectable()
 export class PrismaLockerRepository implements LockerRepository {
@@ -77,7 +77,7 @@ export class PrismaLockerRepository implements LockerRepository {
     });
   }
 
-  async update(locker: LockerEntity): Promise<LockerEntity> {
+  async update(lockerId: string, locker: LockerEntity): Promise<LockerEntity> {
     // Omit null values
     const data = omitBy(
       {
@@ -91,7 +91,7 @@ export class PrismaLockerRepository implements LockerRepository {
     return await this.prisma.locker.update({
       data,
       where: {
-        id: locker.id,
+        id: lockerId,
       },
     });
   }

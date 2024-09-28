@@ -1,4 +1,4 @@
-import { RentEntity } from 'src/model/entity/rent.entity';
+import { RentEntity } from "src/model/entity/rent.entity";
 
 export abstract class RentRepository {
   abstract create(rent: RentEntity): Promise<RentEntity>;
