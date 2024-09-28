@@ -42,6 +42,7 @@ export class RentRepository {
   }
 
   async update(rent: RentEntity): Promise<RentEntity> {
+    
     // Omit null values
     const data = omitBy(
       {

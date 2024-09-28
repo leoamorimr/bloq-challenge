@@ -50,6 +50,7 @@ export class LockerService {
       lockerDto?.blockId,
       lockerDto?.status,
       lockerDto?.isOccupied,
+      lockerId,
     );
 
     //TODO: Extract this logic

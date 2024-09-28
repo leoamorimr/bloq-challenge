@@ -70,6 +70,9 @@ export class LockerRepository {
       where: {
         id: lockerId,
       },
+      include: {
+        bloq: true,
+      },
     });
   }
 

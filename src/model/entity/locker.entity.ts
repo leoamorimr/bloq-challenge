@@ -11,9 +11,15 @@ export class LockerEntity {
 
   bloq?: BloqEntity;
 
-  constructor(bloqId: string, status: string, isOccupied: boolean) {
+  constructor(
+    bloqId: string,
+    status: string,
+    isOccupied: boolean,
+    id?: string,
+  ) {
     this.bloqId = bloqId;
     this.status = status;
     this.isOccupied = isOccupied;
+    this.id = id;
   }
 }
