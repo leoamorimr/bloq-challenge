@@ -1,4 +1,4 @@
-import { LockerEntity } from "./locker.entity";
+import { LockerEntity } from './locker.entity';
 
 export class RentEntity {
   id: string;
@@ -11,7 +11,7 @@ export class RentEntity {
 
   status: string;
 
-  locker?: LockerEntity
+  locker?: LockerEntity;
 
   constructor(lockerId: string, weight: number, size: string, status: string) {
     this.lockerId = lockerId;
@@ -19,5 +19,4 @@ export class RentEntity {
     this.size = size;
     this.status = status;
   }
-
 }

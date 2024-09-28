@@ -1,20 +1,20 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsUUID } from "class-validator";
-import { RentSize } from "../enum/rentSize.enum";
-import { RentStatus } from "../enum/rentStatus.enum";
+import { IsEnum, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
+import { RentSize } from '../enum/rentSize.enum';
+import { RentStatus } from '../enum/rentStatus.enum';
 
 export class RentCreateDto {
-    @IsOptional()
-    @IsUUID()
-    lockerId?: string;
+  @IsOptional()
+  @IsUUID()
+  lockerId?: string;
 
-    @IsNotEmpty()
-    weight: number;
+  @IsNotEmpty()
+  weight: number;
 
-    @IsNotEmpty()
-    @IsEnum(RentSize)
-    size: RentSize;
+  @IsNotEmpty()
+  @IsEnum(RentSize)
+  size: RentSize;
 
-    @IsNotEmpty()
-    @IsEnum(RentStatus)
-    status: RentStatus;
+  @IsNotEmpty()
+  @IsEnum(RentStatus)
+  status: RentStatus;
 }

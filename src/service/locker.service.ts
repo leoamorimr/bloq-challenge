@@ -1,15 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { LockerEntity } from 'src/model/entity/locker.entity';
 import { LockerRepository } from 'src/repository/locker.repository';
 
 @Injectable()
 export class LockerService {
   constructor(
     private readonly lockerRepository: LockerRepository,
-    @InjectPinoLogger(LockerService.name) private readonly logger: PinoLogger
-
-  ) { }
-
+    private readonly logger: PinoLogger,
+  ) {}
 
   async isLockerAvailable(lockerId: string): Promise<boolean> {
     const lockerExist = await this.lockerExists(lockerId);
@@ -25,14 +24,19 @@ export class LockerService {
   }
 
   async lockerExists(lockerId: string): Promise<boolean> {
-    this.logger.info("Checking if locker exists");
+    this.logger.info('Checking if locker exists');
     return this.lockerRepository.exists(lockerId);
   }
 
   async changeOccupied(lockerId: string, isOccupied: boolean): Promise<any> {
-    this.logger.info(`Changing locker ${lockerId} occupied status to: ${isOccupied}`);
+    this.logger.info(
+      `Changing locker ${lockerId} occupied status to: ${isOccupied}`,
+    );
     return this.lockerRepository.changeOccupied(lockerId, isOccupied);
   }
 
-
+  async getLockerInfo(lockerId: string): Promise<LockerEntity> {
+    this.logger.info('Getting locker info');
+    return this.lockerRepository.findOneOrThrow(lockerId);
+  }
 }

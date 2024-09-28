@@ -1,15 +1,11 @@
-import {
-  Body,
-  Controller,
-  Post
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { BloqRequestDto } from 'src/model/dto/bloqCreate.dto';
 import { BloqResponseDto } from 'src/model/dto/bloqResponse.dto';
 import { BloqService } from 'src/service/bloq.service';
 
 @Controller('bloq')
 export class BloqController {
-  constructor(private readonly bloqService: BloqService) { }
+  constructor(private readonly bloqService: BloqService) {}
 
   // @Get()
   // async getBloqs(): Promise<BloqResponseDto[]> {

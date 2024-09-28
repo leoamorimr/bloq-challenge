@@ -15,14 +15,9 @@ import { LockerService } from './service/locker.service';
 import { RentService } from './service/rent.service';
 
 @Module({
-  imports: [
-    CustomLoggerModule,
-  ],
+  imports: [CustomLoggerModule],
 
-  controllers: [
-    BloqController,
-    LockerController,
-    RentController],
+  controllers: [BloqController, LockerController, RentController],
 
   providers: [
     BloqService,
@@ -30,17 +25,17 @@ import { RentService } from './service/rent.service';
     RentService,
     {
       provide: BloqRepository,
-      useClass: PrismaBloqRepository //Dependency injection 
+      useClass: PrismaBloqRepository, //Dependency injection
     },
     {
       provide: LockerRepository,
-      useClass: PrismaLockerRepository
+      useClass: PrismaLockerRepository,
     },
     {
       provide: RentRepository,
-      useClass: PrismaRentRepository
+      useClass: PrismaRentRepository,
     },
-    PrismaService
+    PrismaService,
   ],
 })
-export class AppModule { }
+export class AppModule {}

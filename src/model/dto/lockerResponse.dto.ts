@@ -1,18 +1,19 @@
-import { BloqResponseDto } from "./bloqResponse.dto";
+import { LockerEntity } from '../entity/locker.entity';
+import { BloqResponseDto } from './bloqResponse.dto';
 
 export class LockerReponseDto {
-    id?: string;
+  id?: string;
 
-    status: string;
+  status?: string;
 
-    isOccupied: boolean;
+  isOccupied?: boolean;
 
-    bloq?: BloqResponseDto;
+  bloq?: BloqResponseDto;
 
-    constructor(status: string, isOccupied: boolean, bloq?: BloqResponseDto, id?: string) {
-        this.id = id;
-        this.status = status;
-        this.isOccupied = isOccupied;
-        this.bloq = bloq;
-    }
+  constructor(locker: LockerEntity) {
+    this.id = locker?.id;
+    this.status = locker?.status;
+    this.isOccupied = locker?.isOccupied;
+    this.bloq = locker?.bloq;
+  }
 }
