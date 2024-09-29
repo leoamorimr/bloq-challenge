@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
 import { UUID } from "node:crypto";
-import { BloqRequestDto } from "src/model/dto/bloq-create.dto";
+import { BloqCreateDto } from "src/model/dto/bloq-create.dto";
 import { BloqResponseDto } from "src/model/dto/bloq-response.dto";
 import { BloqUpdateDto } from "src/model/dto/bloq-update.dto";
 import { BloqEntity } from "src/model/entity/bloq.entity";
@@ -14,7 +14,7 @@ export class BloqService {
     private readonly logger: PinoLogger,
   ) {}
 
-  async create(bloq: BloqRequestDto): Promise<BloqResponseDto> {
+  async create(bloq: BloqCreateDto): Promise<BloqResponseDto> {
     this.logger.info("Creating new bloq");
     const createdBloq = await this.bloqRepository.create(
       new BloqEntity(bloq.title, bloq.address),

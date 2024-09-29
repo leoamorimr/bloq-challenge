@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { PinoLogger } from "nestjs-pino";
 import { BloqController } from "./controller/bloq.controller";
 import { LockerController } from "./controller/locker.controller";
 import { RentController } from "./controller/rent.controller";
@@ -23,6 +24,7 @@ import { RentService } from "./service/rent.service";
     BloqService,
     LockerService,
     RentService,
+    PinoLogger,
     {
       provide: BloqRepository,
       useClass: PrismaBloqRepository,

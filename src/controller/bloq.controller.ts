@@ -1,7 +1,7 @@
 import { Body, Controller, HttpException, Patch, Post } from "@nestjs/common";
 import { UUID } from "node:crypto";
 import { isUUId } from "src/decorator/uuid.decorator";
-import { BloqRequestDto } from "src/model/dto/bloq-create.dto";
+import { BloqCreateDto } from "src/model/dto/bloq-create.dto";
 import { BloqResponseDto } from "src/model/dto/bloq-response.dto";
 import { BloqUpdateDto } from "src/model/dto/bloq-update.dto";
 import { BloqService } from "src/service/bloq.service";
@@ -12,7 +12,7 @@ export class BloqController {
 
   @Post("create")
   async createBloq(
-    @Body() bloq: BloqRequestDto,
+    @Body() bloq: BloqCreateDto,
   ): Promise<BloqResponseDto | HttpException> {
     return await this.bloqService.create(bloq);
   }

@@ -1,11 +1,18 @@
-import { BadRequestException, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { PinoLogger } from "nestjs-pino";
 import { LockerRepository } from "src/repository/locker.repository";
+import { fakeBloqEntity } from "../../test/mock/bloq";
 import {
   fakeLockEntity,
   fakeLockRequestDto,
+  fakeUUID,
 } from "../../test/mock/fake-locker";
+import { LockerCreateDto } from "../model/dto/locker-create.dto";
 import { LockerReponseDto } from "../model/dto/locker-response.dto";
 import { LockerUpdateDto } from "../model/dto/locker-update.dto";
 import { BloqService } from "./bloq.service";
@@ -14,6 +21,7 @@ import { LockerService } from "./locker.service";
 describe("LockerService", () => {
   let service: LockerService;
   let lockerRepository: LockerRepository;
+  let bloqService: BloqService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,6 +34,8 @@ describe("LockerService", () => {
             isAvailable: jest.fn(),
             exists: jest.fn(),
             update: jest.fn(),
+            changeOccupied: jest.fn(),
+            create: jest.fn(),
           },
         },
         {
@@ -46,6 +56,7 @@ describe("LockerService", () => {
 
     service = module.get<LockerService>(LockerService);
     lockerRepository = module.get<LockerRepository>(LockerRepository);
+    bloqService = module.get<BloqService>(BloqService);
   });
 
   it("should be defined", () => {
@@ -127,6 +138,83 @@ describe("LockerService", () => {
       await expect(
         service.update("any-uuid", fakeLockRequestDto as LockerUpdateDto),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it("should throw NotFoundException if locker not exist", async () => {
+      jest
+        .spyOn(service, "lockerExists")
+        .mockRejectedValue(new NotFoundException());
+
+      await expect(
+        service.update("any-uuid", fakeLockRequestDto as LockerUpdateDto),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it("should throw InternalServerErrorException on update locker", async () => {
+      fakeLockEntity.isOccupied = false;
+      jest.spyOn(service, "lockerExists").mockResolvedValue(true);
+      jest.spyOn(service, "isLockerAvailable").mockResolvedValue(true);
+      jest.spyOn(lockerRepository, "update").mockResolvedValue(fakeLockEntity);
+      jest.spyOn(service, "changeOccupied").mockRejectedValue(new Error());
+      jest
+        .spyOn(lockerRepository, "findOneOrThrow")
+        .mockResolvedValue(fakeLockEntity);
+
+      await expect(
+        service.update("any-uuid", fakeLockRequestDto as LockerUpdateDto),
+      ).rejects.toThrow(InternalServerErrorException);
+    });
+  });
+
+  describe("changeOccupied", () => {
+    const fakeResponse = fakeLockEntity;
+    fakeResponse.isOccupied = true;
+    it("should change the locker status to occupied", async () => {
+      jest
+        .spyOn(lockerRepository, "changeOccupied")
+        .mockResolvedValue(fakeResponse);
+
+      const response = await service.changeOccupied(fakeUUID, true);
+
+      expect(lockerRepository.changeOccupied).toHaveBeenCalledWith(
+        fakeUUID,
+        true,
+      );
+      expect(response).toEqual(fakeResponse);
+    });
+  });
+
+  describe("create", () => {
+    it("should create a new locker successfully", async () => {
+      jest.spyOn(bloqService, "get").mockResolvedValue(fakeBloqEntity);
+
+      jest.spyOn(lockerRepository, "create").mockResolvedValue(fakeLockEntity);
+
+      jest
+        .spyOn(lockerRepository, "findOneOrThrow")
+        .mockResolvedValue(fakeLockEntity);
+
+      await service.create(fakeLockRequestDto as LockerCreateDto);
+
+      expect(lockerRepository.create).toHaveBeenCalled();
+    });
+
+    it("should throw Error on create Locker", async () => {
+      jest.spyOn(bloqService, "get").mockResolvedValue(fakeBloqEntity);
+
+      jest.spyOn(lockerRepository, "create").mockRejectedValue(new Error());
+
+      await expect(
+        service.create(fakeLockRequestDto as LockerCreateDto),
+      ).rejects.toThrow(Error);
+    });
+
+    it("should throw NotFoundException id bloq not exist", async () => {
+      jest.spyOn(bloqService, "get").mockRejectedValue(new NotFoundException());
+
+      await expect(
+        service.create(fakeLockRequestDto as LockerCreateDto),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

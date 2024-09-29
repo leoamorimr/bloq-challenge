@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
-export class BloqRequestDto {
+export class BloqCreateDto {
   @IsNotEmpty()
   title: string;
 

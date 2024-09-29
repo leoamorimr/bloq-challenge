@@ -1,14 +1,11 @@
 import { HttpException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { randomUUID } from "node:crypto";
-import { BloqRequestDto } from "src/model/dto/bloq-create.dto";
+import { BloqCreateDto } from "src/model/dto/bloq-create.dto";
 import { BloqResponseDto } from "src/model/dto/bloq-response.dto";
 import { BloqUpdateDto } from "src/model/dto/bloq-update.dto";
 import { BloqService } from "src/service/bloq.service";
-import {
-  fakeBloqRequestDto,
-  fakeBloqResponseDto,
-} from "../../test/mock/bloq";
+import { fakeBloqRequestDto, fakeBloqResponseDto } from "../../test/mock/bloq";
 import { BloqController } from "./bloq.controller";
 
 describe("BloqController", () => {
@@ -35,8 +32,7 @@ describe("BloqController", () => {
 
   describe("createBloq", () => {
     it("should create a new bloq", async () => {
-      const bloqRequestDto: BloqRequestDto =
-        fakeBloqRequestDto as BloqRequestDto;
+      const bloqRequestDto: BloqCreateDto = fakeBloqRequestDto as BloqCreateDto;
       const bloqResponseDto: BloqResponseDto = fakeBloqResponseDto;
 
       jest.spyOn(bloqService, "create").mockResolvedValue(bloqResponseDto);
@@ -47,8 +43,7 @@ describe("BloqController", () => {
     });
 
     it("should throw an HttpException if creation fails", async () => {
-      const bloqRequestDto: BloqRequestDto =
-        fakeBloqRequestDto as BloqRequestDto;
+      const bloqRequestDto: BloqCreateDto = fakeBloqRequestDto as BloqCreateDto;
       const httpException = new HttpException("Error", 400);
 
       jest.spyOn(bloqService, "create").mockRejectedValue(httpException);

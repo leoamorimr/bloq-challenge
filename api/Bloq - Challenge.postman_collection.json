@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "35d2ff93-1375-4f16-8965-717163b19443",
+		"name": "Bloq - Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Bloq",
+			"item": [
+				{
+					"name": "Create Bloq",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"XXX\",\r\n    \"address\": \"AAA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/bloq/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bloq",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Bloq",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"AAA\",\r\n    \"address\": \"BBSA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/bloq/update/22ffa3c5-3a3d-4f71-81f1-cac18ffbc511",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bloq",
+								"update",
+								"22ffa3c5-3a3d-4f71-81f1-cac18ffbc511"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Locker",
+			"item": [
+				{
+					"name": "Create Locker",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bloqId\": \"484e01be-1570-4ac1-a2a9-02aad3acc54e\",\r\n    \"status\": \"CLOSED\",\r\n    \"isOccupied\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/locker/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"locker",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Locker",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"OPEN\",\r\n    \"isOccupied\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/locker/update/c4705b02-45be-4fd7-8d82-d336df1fa493",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"locker",
+								"update",
+								"c4705b02-45be-4fd7-8d82-d336df1fa493"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rent",
+			"item": [
+				{
+					"name": "Create Rent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lockerId\": \"c4705b02-45be-4fd7-8d82-d336df1fa493\",\r\n    \"weight\": 5,\r\n    \"size\": \"M\",\r\n    \"status\": \"CREATED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rent/create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"rent",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lockerId\": \"c4705b02-45be-4fd7-8d82-d336df1fa493\",\r\n    \"size\": \"M\",\r\n    \"status\": \"DELIVERED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rent/deposit/4977b5b0-8b3c-4c6c-b2d4-e12cc4e1ded1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"rent",
+								"deposit",
+								"4977b5b0-8b3c-4c6c-b2d4-e12cc4e1ded1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Rent",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/rent/retrieve/4977b5b0-8b3c-4c6c-b2d4-e12cc4e1dede",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"rent",
+								"retrieve",
+								"4977b5b0-8b3c-4c6c-b2d4-e12cc4e1dede"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

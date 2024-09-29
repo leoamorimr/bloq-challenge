@@ -80,7 +80,7 @@ export class RentService {
 
     const rentDb = await this.rentRepository
       .findOneOrThrow(rentId)
-      .catch((error) => {
+      .catch(() => {
         this.logger.error(`Rent with id ${rentId} not found`);
         throw new NotFoundException(`Rent not found`);
       });
@@ -105,7 +105,7 @@ export class RentService {
 
     this.logger.info("Updating rent");
     const updatedRent = await this.rentRepository
-      .update(updatedEntity)
+      .update(rentId, updatedEntity)
       .then(async (rent) => {
         await this.lockerService.changeOccupied(rent.lockerId, true);
         return await this.rentRepository.findOneOrThrow(rent.id);

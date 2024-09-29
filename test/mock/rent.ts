@@ -14,11 +14,6 @@ export const fakeRentRequestDto: RentCreateDto | RentUpdateDto = {
 
 export const fakeRentResponseDto: RentResponseDto = {
   id: "any-uuid",
-  locker: {
-    id: "any-uuid",
-    isOccupied: true,
-    status: "any status",
-  },
   status: RentStatus.CREATED,
   size: RentSize.L,
   weight: 0,
@@ -27,7 +22,7 @@ export const fakeRentResponseDto: RentResponseDto = {
 export const fakeRentEntity: RentEntity = {
   id: "any-uuid",
   lockerId: "any-uuid",
-  weight: 7,
-  size: "L",
-  status: "WAITING_PICKUP",
+  weight: 0,
+  size: RentSize.L,
+  status: RentStatus.CREATED,
 };

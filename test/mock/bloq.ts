@@ -1,9 +1,9 @@
-import { BloqRequestDto } from "src/model/dto/bloq-create.dto";
+import { BloqCreateDto } from "src/model/dto/bloq-create.dto";
 import { BloqResponseDto } from "src/model/dto/bloq-response.dto";
 import { BloqUpdateDto } from "src/model/dto/bloq-update.dto";
 import { BloqEntity } from "../../src/model/entity/bloq.entity";
 
-export const fakeBloqRequestDto: BloqRequestDto | BloqUpdateDto = {
+export const fakeBloqRequestDto: BloqCreateDto | BloqUpdateDto = {
   title: "Any title",
   address: "Any address",
 };
