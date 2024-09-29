@@ -1,0 +1,308 @@
+openapi: 3.0.0
+paths:
+  /bloq/create:
+    post:
+      operationId: BloqController_createBloq
+      summary: Create a new bloq
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BloqCreateDto'
+      responses:
+        '201':
+          description: The bloq has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BloqResponseDto'
+        '400':
+          description: Bad Request
+      tags:
+        - bloq
+  /bloq/update/{bloqId}:
+    patch:
+      operationId: BloqController_updateBloq
+      summary: Update an existing bloq
+      parameters:
+        - name: bloqId
+          required: true
+          in: path
+          description: UUID of the bloq to update
+          schema: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BloqUpdateDto'
+      responses:
+        '200':
+          description: The bloq has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BloqResponseDto'
+        '400':
+          description: Bad Request
+      tags:
+        - bloq
+  /locker/update/{lockerId}:
+    patch:
+      operationId: LockerController_update
+      summary: Update an existing locker
+      parameters:
+        - name: lockerId
+          required: true
+          in: path
+          description: UUID of the locker to update
+          schema: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LockerUpdateDto'
+      responses:
+        '200':
+          description: The locker has been successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LockerResponseDto'
+        '400':
+          description: Bad Request
+      tags:
+        - locker
+  /locker/create:
+    post:
+      operationId: LockerController_create
+      summary: Create a new locker
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LockerCreateDto'
+      responses:
+        '201':
+          description: The locker has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LockerResponseDto'
+        '400':
+          description: Bad Request
+      tags:
+        - locker
+  /rent/create:
+    post:
+      operationId: RentController_createRent
+      summary: Create a new rent
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentCreateDto'
+      responses:
+        '201':
+          description: The rent has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentResponseDto'
+        '400':
+          description: Bad Request
+      tags:
+        - rent
+  /rent/deposit/{rentId}:
+    patch:
+      operationId: RentController_deposit
+      summary: Deposit rent
+      parameters:
+        - name: rentId
+          required: true
+          in: path
+          description: UUID of the rent to deposit
+          schema: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentUpdateDto'
+      responses:
+        '200':
+          description: The rent has been successfully deposited.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentResponseDto'
+        '400':
+          description: Bad Request
+      tags:
+        - rent
+  /rent/retrieve/{rentId}:
+    delete:
+      operationId: RentController_retrieve
+      summary: Retrieve rent
+      parameters:
+        - name: rentId
+          required: true
+          in: path
+          description: UUID of the rent to retrieve
+          schema: {}
+      responses:
+        '200':
+          description: The rent has been successfully retrieved.
+        '400':
+          description: Bad Request
+      tags:
+        - rent
+info:
+  title: API Documentation
+  description: The API description
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    BloqCreateDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the bloq
+          example: My Bloq Title
+        address:
+          type: string
+          description: Address of the bloq
+          example: 1234 Bloq Street
+      required:
+        - title
+        - address
+    LockerResponseDto:
+      type: object
+      properties: {}
+    BloqResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the bloq
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          description: Title of the bloq
+          example: My Bloq Title
+        address:
+          type: string
+          description: Address of the bloq
+          example: 1234 Bloq Street
+        lockers:
+          description: List of lockers associated with the bloq
+          type: array
+          items:
+            $ref: '#/components/schemas/LockerResponseDto'
+      required:
+        - id
+        - title
+        - address
+        - lockers
+    BloqUpdateDto:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the bloq
+          example: Updated Bloq Title
+        address:
+          type: string
+          description: Address of the bloq
+          example: Updated Bloq Street
+    LockerUpdateDto:
+      type: object
+      properties:
+        bloqId:
+          type: string
+          description: Unique identifier of the bloq
+          example: 123e4567-e89b-12d3-a456-426614174000
+        status:
+          type: string
+          description: Status of the locker
+          example: OPEN
+          enum:
+            - OPEN
+            - CLOSED
+        isOccupied:
+          type: boolean
+          description: Indicates if the locker is occupied
+          example: false
+    LockerCreateDto:
+      type: object
+      properties:
+        bloqId:
+          type: string
+          description: Unique identifier of the bloq
+          example: 123e4567-e89b-12d3-a456-426614174000
+        status:
+          type: string
+          description: Status of the locker
+          example: OPEN
+          enum:
+            - OPEN
+            - CLOSED
+        isOccupied:
+          type: boolean
+          description: Indicates if the locker is occupied
+          example: false
+      required:
+        - bloqId
+        - status
+        - isOccupied
+    RentCreateDto:
+      type: object
+      properties:
+        lockerId:
+          type: string
+          description: Unique identifier of the locker
+          example: 123e4567-e89b-12d3-a456-426614174000
+        weight:
+          type: number
+          description: Weight of the rent
+          example: 25.5
+        size:
+          type: string
+          description: Size of the rent
+          example: L
+          enum:
+            - XS
+            - S
+            - M
+            - L
+            - XL
+        status:
+          type: string
+          description: Status of the rent
+          example: CREATED
+          enum:
+            - CREATED
+            - WAITING_DROPOFF
+            - WAITING_PICKUP
+            - DELIVERED
+      required:
+        - weight
+        - size
+        - status
+    RentResponseDto:
+      type: object
+      properties: {}
+    RentUpdateDto:
+      type: object
+      properties: {}

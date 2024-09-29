@@ -1,7 +1,7 @@
 import { LockerEntity } from "../entity/locker.entity";
 import { BloqResponseDto } from "./bloq-response.dto";
 
-export class LockerReponseDto {
+export class LockerResponseDto {
   id?: string;
 
   status?: string;

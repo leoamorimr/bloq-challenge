@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { LockerCreateDto } from "src/model/dto/locker-create.dto";
-import { LockerReponseDto } from "src/model/dto/locker-response.dto";
+import { LockerResponseDto } from "src/model/dto/locker-response.dto";
 import { LockerUpdateDto } from "src/model/dto/locker-update.dto";
 import { LockerEntity } from "../../src/model/entity/locker.entity";
 
@@ -10,7 +10,7 @@ export const fakeLockRequestDto: LockerCreateDto | LockerUpdateDto = {
   isOccupied: false,
 };
 
-export const fakeLockResponseDto: LockerReponseDto = {
+export const fakeLockResponseDto: LockerResponseDto = {
   status: "any status",
   isOccupied: false,
   id: "any-uuid",

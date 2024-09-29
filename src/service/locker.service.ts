@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { PinoLogger } from "nestjs-pino";
 import { LockerCreateDto } from "src/model/dto/locker-create.dto";
-import { LockerReponseDto } from "src/model/dto/locker-response.dto";
+import { LockerResponseDto } from "src/model/dto/locker-response.dto";
 import { LockerUpdateDto } from "src/model/dto/locker-update.dto";
 import { LockerEntity } from "src/model/entity/locker.entity";
 import { LockerStatus } from "src/model/enum/locker-status.enum";
@@ -55,7 +55,7 @@ export class LockerService {
   async update(
     lockerId: string,
     lockerDto: LockerUpdateDto,
-  ): Promise<LockerReponseDto | Error> {
+  ): Promise<LockerResponseDto | Error> {
     const lockerEntity = new LockerEntity(
       lockerDto?.bloqId,
       lockerDto?.status,
@@ -91,10 +91,10 @@ export class LockerService {
         );
       });
 
-    return new LockerReponseDto(updatedLocker);
+    return new LockerResponseDto(updatedLocker);
   }
 
-  async create(lockerDto: LockerCreateDto): Promise<LockerReponseDto> {
+  async create(lockerDto: LockerCreateDto): Promise<LockerResponseDto> {
     this.logger.info("Creating new Locker");
     await this.bloqService.get(lockerDto.bloqId).catch((error) => {
       throw error;
@@ -115,6 +115,6 @@ export class LockerService {
         throw error;
       });
 
-    return new LockerReponseDto(createdLocker);
+    return new LockerResponseDto(createdLocker);
   }
 }

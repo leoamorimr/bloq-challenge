@@ -42,6 +42,7 @@ describe("RentService", () => {
             isLockerAvailable: jest.fn(),
             changeOccupied: jest.fn(),
             findOneOrThrow: jest.fn(),
+            lockerExists: jest.fn(),
           },
         },
         {
@@ -83,6 +84,7 @@ describe("RentService", () => {
 
     it("should create a rent without locker", async () => {
       jest.spyOn(rentRepository, "create").mockResolvedValue(fakeRentEntity);
+      jest.spyOn(lockerService, "lockerExists").mockResolvedValue(true);
       jest.spyOn(lockerService, "isLockerAvailable").mockResolvedValue(true);
 
       const result = await service.create(fakeRentRequestDto as RentCreateDto);
@@ -93,6 +95,7 @@ describe("RentService", () => {
 
     it("should create a rent with available locker", async () => {
       jest.spyOn(rentRepository, "create").mockResolvedValue(fakeRentEntity);
+      jest.spyOn(lockerService, "lockerExists").mockResolvedValue(true);
       jest.spyOn(lockerService, "isLockerAvailable").mockResolvedValue(true);
 
       const result = await service.create(fakeRentRequestDto as RentCreateDto);
@@ -105,6 +108,7 @@ describe("RentService", () => {
     });
 
     it("should throw BadRequestException on create a rent", async () => {
+      jest.spyOn(lockerService, "lockerExists").mockResolvedValue(true);
       jest.spyOn(lockerService, "isLockerAvailable").mockResolvedValue(true);
       jest
         .spyOn(rentRepository, "create")
@@ -117,8 +121,25 @@ describe("RentService", () => {
       expect(rentRepository.create).toHaveBeenCalled();
     });
 
+    it("should throw NotFoundException if locker does not exist", async () => {
+      jest
+        .spyOn(lockerService, "lockerExists")
+        .mockRejectedValue(new NotFoundException());
+      jest.spyOn(lockerService, "isLockerAvailable").mockResolvedValue(true);
+      jest
+        .spyOn(rentRepository, "create")
+        .mockRejectedValue(new InternalServerErrorException());
+
+      await expect(
+        service.create(fakeRentRequestDto as RentCreateDto),
+      ).rejects.toThrow(NotFoundException);
+
+      expect(rentRepository.create).not.toHaveBeenCalled();
+    });
+
     it("should throw BadRequestException if locker is not available", async () => {
       jest.spyOn(lockerService, "isLockerAvailable").mockResolvedValue(false);
+      jest.spyOn(lockerService, "lockerExists").mockResolvedValue(true);
 
       await expect(
         service.create(fakeRentRequestDto as RentCreateDto),

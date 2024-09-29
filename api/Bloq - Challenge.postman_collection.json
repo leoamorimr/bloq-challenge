@@ -75,7 +75,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"bloqId\": \"484e01be-1570-4ac1-a2a9-02aad3acc54e\",\r\n    \"status\": \"CLOSED\",\r\n    \"isOccupied\": false\r\n}",
+							"raw": "{\r\n    \"bloqId\": \"484e01be-1570-4ac1-a2a9-02aad3acc54e\",\r\n    \"status\": \"OPENE\",\r\n    \"isOccupied\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -102,7 +102,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"OPEN\",\r\n    \"isOccupied\": false\r\n}",
+							"raw": "{\r\n    \"status\": \"OPEN\",\r\n    \"isOccupied\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -188,15 +188,24 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lockerId\": \"c4705b02-45be-4fd7-8d82-d336df1fa493\",\r\n    \"size\": \"M\",\r\n    \"status\": \"DELIVERED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/rent/retrieve/4977b5b0-8b3c-4c6c-b2d4-e12cc4e1dede",
+							"raw": "{{baseUrl}}/rent/retrieve/feb72a9a-258d-49c9-92de-f90b1f11984d",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"rent",
 								"retrieve",
-								"4977b5b0-8b3c-4c6c-b2d4-e12cc4e1dede"
+								"feb72a9a-258d-49c9-92de-f90b1f11984d"
 							]
 						}
 					},

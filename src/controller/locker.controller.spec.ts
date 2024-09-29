@@ -2,7 +2,7 @@ import { HttpException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { randomUUID } from "node:crypto";
 import { LockerCreateDto } from "src/model/dto/locker-create.dto";
-import { LockerReponseDto } from "src/model/dto/locker-response.dto";
+import { LockerResponseDto } from "src/model/dto/locker-response.dto";
 import { LockerUpdateDto } from "src/model/dto/locker-update.dto";
 import { LockerService } from "src/service/locker.service";
 import {
@@ -36,7 +36,7 @@ describe("LockerController", () => {
   describe("create", () => {
     const lockerCreateDto: LockerCreateDto =
       fakeLockRequestDto as LockerCreateDto;
-    const lockerResponseDto: LockerReponseDto = fakeLockResponseDto;
+    const lockerResponseDto: LockerResponseDto = fakeLockResponseDto;
 
     it("should create a new locker", async () => {
       jest.spyOn(lockerService, "create").mockResolvedValue(lockerResponseDto);
@@ -61,7 +61,7 @@ describe("LockerController", () => {
     const lockerId = randomUUID();
     const lockerUpdateDto: LockerUpdateDto =
       fakeLockRequestDto as LockerUpdateDto;
-    const lockerResponseDto: LockerReponseDto = fakeLockResponseDto;
+    const lockerResponseDto: LockerResponseDto = fakeLockResponseDto;
 
     it("should update an existing locker", async () => {
       jest.spyOn(lockerService, "update").mockResolvedValue(lockerResponseDto);

@@ -40,6 +40,10 @@ export class RentService {
       return new RentResponseDto(newRent);
     }
 
+    await this.lockerService.lockerExists(rentDto.lockerId).catch((error) => {
+      throw error;
+    });
+
     const lockerAvailable = await this.lockerService.isLockerAvailable(
       rentDto.lockerId,
     );

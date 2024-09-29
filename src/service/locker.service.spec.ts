@@ -13,7 +13,7 @@ import {
   fakeUUID,
 } from "../../test/mock/fake-locker";
 import { LockerCreateDto } from "../model/dto/locker-create.dto";
-import { LockerReponseDto } from "../model/dto/locker-response.dto";
+import { LockerResponseDto } from "../model/dto/locker-response.dto";
 import { LockerUpdateDto } from "../model/dto/locker-update.dto";
 import { BloqService } from "./bloq.service";
 import { LockerService } from "./locker.service";
@@ -118,7 +118,7 @@ describe("LockerService", () => {
         fakeLockRequestDto as LockerUpdateDto,
       );
       expect(service.changeOccupied).toHaveBeenCalled();
-      expect(result).toEqual(expect.any(LockerReponseDto));
+      expect(result).toEqual(expect.any(LockerResponseDto));
     });
 
     it("should throw BadRequestException if locker is occupied", async () => {
