@@ -77,7 +77,7 @@ export class LockerService {
       );
     }
 
-    this.logger.info(`Updating locker`);
+    this.logger.info("Updating locker");
     const updatedLocker = await this.lockerRepository
       .update(lockerId, lockerEntity)
       .then(async (locker) => {

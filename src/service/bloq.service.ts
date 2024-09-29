@@ -37,7 +37,7 @@ export class BloqService {
     this.logger.info(`Updating bloq ${bloqId}`);
     const updatedBloq = await this.bloqRepository
       .update(bloqId, bloqEntity)
-      .then(async (bloq) => {
+      .then(async () => {
         return await this.bloqRepository.findOne(bloqId);
       });
 
