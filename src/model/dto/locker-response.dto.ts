@@ -23,7 +23,7 @@ export class LockerResponseDto {
 
   @ApiProperty({
     description: "Bloq associated with the locker",
-    type: BloqResponseDto,
+    type: () => BloqResponseDto,
   })
   bloq?: BloqResponseDto;
 
