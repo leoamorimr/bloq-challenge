@@ -35,7 +35,6 @@ $ npm install
 # Deploy database structure to local database
 $ npm run prisma:deploy
 
-
 # Seed local database w/ initial data
 $ npm run seed
 ```
