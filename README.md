@@ -30,6 +30,9 @@
 
 ```bash
 $ npm install
+
+##Seed local database w/ initial data
+$ npm run seed
 ```
 
 ## Compile and run the project
@@ -56,6 +59,13 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Seed local database
+
+```bash
+$ npm run seed
+
 ```
 
 ## Resources

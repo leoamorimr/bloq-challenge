@@ -18,7 +18,10 @@
     "test:cov": "jest --coverage --config jest.config.ts --maxWorkers=50%",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
