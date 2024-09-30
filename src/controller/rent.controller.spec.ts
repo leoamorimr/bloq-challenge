@@ -22,6 +22,7 @@ describe("RentController", () => {
             create: jest.fn(),
             deposit: jest.fn(),
             retrieve: jest.fn(),
+            findAll: jest.fn(),
           },
         },
       ],
@@ -94,6 +95,17 @@ describe("RentController", () => {
       await expect(rentController.retrieve(rentId)).rejects.toThrow(
         httpException,
       );
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of rents", async () => {
+      const rentList: RentResponseDto[] = [rentResponseDto];
+      jest.spyOn(rentService, "findAll").mockResolvedValue(rentList);
+
+      const result = await rentController.findAll();
+      expect(result).toEqual(rentList);
+      expect(rentService.findAll).toHaveBeenCalled();
     });
   });
 });

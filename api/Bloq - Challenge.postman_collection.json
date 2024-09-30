@@ -9,6 +9,23 @@
 			"name": "Bloq",
 			"item": [
 				{
+					"name": "Get All Bloqs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/bloq",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"bloq"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Bloq",
 					"request": {
 						"method": "POST",
@@ -68,6 +85,20 @@
 		{
 			"name": "Locker",
 			"item": [
+				{
+					"name": "Get All Lockers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "Get All Lockers",
+							"host": [
+								"Get All Lockers"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Create Locker",
 					"request": {
@@ -129,13 +160,30 @@
 			"name": "Rent",
 			"item": [
 				{
+					"name": "Get All Rents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/rent",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"rent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Rent",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"lockerId\": \"c4705b02-45be-4fd7-8d82-d336df1fa493\",\r\n    \"weight\": 5,\r\n    \"size\": \"M\",\r\n    \"status\": \"CREATED\"\r\n}",
+							"raw": "{\r\n    \"lockerId\": \"6b33b2d1-af38-4b60-a3c5-53a69f70a351\",\r\n    \"weight\": 5,\r\n    \"size\": \"M\",\r\n    \"status\": \"CREATED\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -170,14 +218,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/rent/deposit/4977b5b0-8b3c-4c6c-b2d4-e12cc4e1ded1",
+							"raw": "{{baseUrl}}/rent/deposit/68b5486b-746a-4c7b-8e58-503bd50bce79",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"rent",
 								"deposit",
-								"4977b5b0-8b3c-4c6c-b2d4-e12cc4e1ded1"
+								"68b5486b-746a-4c7b-8e58-503bd50bce79"
 							]
 						}
 					},
@@ -198,14 +246,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/rent/retrieve/feb72a9a-258d-49c9-92de-f90b1f11984d",
+							"raw": "{{baseUrl}}/rent/retrieve/a890a50c-5f78-4d5c-bfba-dbbb57e66093",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"rent",
 								"retrieve",
-								"feb72a9a-258d-49c9-92de-f90b1f11984d"
+								"a890a50c-5f78-4d5c-bfba-dbbb57e66093"
 							]
 						}
 					},

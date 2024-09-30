@@ -13,4 +13,5 @@ export abstract class LockerRepository {
     lockerId: string,
     locker: LockerEntity,
   ): Promise<LockerEntity>;
+  abstract findAll(): Promise<LockerEntity[]>;
 }

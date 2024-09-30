@@ -50,4 +50,10 @@ export class BloqService {
       throw new NotFoundException("Bloq not found");
     });
   }
+
+  async findAll(): Promise<BloqResponseDto[]> {
+    this.logger.info("Getting all bloqs");
+    const bloqs = await this.bloqRepository.findAll();
+    return bloqs.map((bloq) => new BloqResponseDto(bloq));
+  }
 }

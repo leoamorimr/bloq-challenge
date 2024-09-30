@@ -95,4 +95,12 @@ export class PrismaLockerRepository implements LockerRepository {
       },
     });
   }
+
+  async findAll(): Promise<LockerEntity[]> {
+    return await this.prisma.locker.findMany({
+      include: {
+        bloq: true,
+      },
+    });
+  }
 }

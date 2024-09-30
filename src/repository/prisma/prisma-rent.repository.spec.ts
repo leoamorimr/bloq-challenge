@@ -28,6 +28,7 @@ describe("PrismaRentRepository", () => {
         exists: jest.fn(),
         update: jest.fn(),
         delete: jest.fn(),
+        findAll: jest.fn(),
       },
       writable: true,
     });
@@ -86,6 +87,17 @@ describe("PrismaRentRepository", () => {
       expect(prismaService.rent.delete).toHaveBeenCalledWith({
         where: { id: fakeUUID },
       });
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of rents", async () => {
+      const rentList = [fakeRentEntity];
+      prismaService.rent.findMany = jest.fn().mockResolvedValue(rentList);
+
+      const result = await repository.findAll();
+      expect(result).toEqual(rentList);
+      expect(prismaService.rent.findMany).toHaveBeenCalled();
     });
   });
 });

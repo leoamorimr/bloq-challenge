@@ -69,4 +69,12 @@ export class PrismaRentRepository implements RentRepository {
       },
     });
   }
+
+  async findAll(): Promise<RentEntity[]> {
+    return await this.prisma.rent.findMany({
+      include: {
+        locker: true,
+      },
+    });
+  }
 }

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpException,
   Patch,
   Post,
@@ -67,5 +68,16 @@ export class RentController {
     @isUUId("rentId") rentId: UUID,
   ): Promise<object | HttpException> {
     return await this.rentService.retrieve(rentId);
+  }
+
+  @Get()
+  @ApiOperation({ summary: "List all rents" })
+  @ApiResponse({
+    status: 200,
+    description: "List of all rents",
+    type: [RentResponseDto],
+  })
+  async findAll(): Promise<RentResponseDto[]> {
+    return await this.rentService.findAll();
   }
 }

@@ -51,4 +51,8 @@ export class PrismaBloqRepository implements BloqRepository {
       },
     });
   }
+
+  async findAll(): Promise<BloqEntity[]> {
+    return await this.prisma.bloq.findMany();
+  }
 }

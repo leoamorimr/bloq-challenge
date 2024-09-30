@@ -34,6 +34,7 @@ describe("RentService", () => {
             update: jest.fn(),
             delete: jest.fn(),
             findOneOrThrow: jest.fn(),
+            findAll: jest.fn(),
           },
         },
         {
@@ -279,6 +280,23 @@ describe("RentService", () => {
       ).rejects.toThrow(InternalServerErrorException);
 
       expect(rentRepository.findOneOrThrow).toHaveBeenCalledWith(fakeUUID);
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of rents", async () => {
+      const rentList = [fakeRentEntity];
+      jest.spyOn(rentRepository, "findAll").mockResolvedValue(rentList);
+
+      await service.findAll();
+      expect(rentRepository.findAll).toHaveBeenCalled();
+    });
+
+    it("should throw an error if findAll fails", async () => {
+      const error = new Error("Error");
+      jest.spyOn(rentRepository, "findAll").mockRejectedValue(error);
+
+      await expect(service.findAll()).rejects.toThrow(error);
     });
   });
 });

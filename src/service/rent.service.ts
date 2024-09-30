@@ -144,4 +144,10 @@ export class RentService {
     this.logger.info("Rent deleted successfully");
     return { message: "Rent retrieved successfully" };
   }
+
+  async findAll(): Promise<RentResponseDto[]> {
+    this.logger.info("Listing all rents");
+    const rents: RentEntity[] = await this.rentRepository.findAll();
+    return rents.map((rent) => new RentResponseDto(rent));
+  }
 }

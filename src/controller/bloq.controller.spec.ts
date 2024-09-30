@@ -21,6 +21,7 @@ describe("BloqController", () => {
           useValue: {
             create: jest.fn(),
             update: jest.fn(),
+            findAll: jest.fn(),
           },
         },
       ],
@@ -77,6 +78,17 @@ describe("BloqController", () => {
       await expect(
         bloqController.updateBloq(bloqId, bloqUpdateDto),
       ).rejects.toThrow(httpException);
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of bloqs", async () => {
+      const bloqList: BloqResponseDto[] = [fakeBloqResponseDto];
+      jest.spyOn(bloqService, "findAll").mockResolvedValue(bloqList);
+
+      const result = await bloqController.findAll();
+      expect(result).toEqual(bloqList);
+      expect(bloqService.findAll).toHaveBeenCalled();
     });
   });
 });

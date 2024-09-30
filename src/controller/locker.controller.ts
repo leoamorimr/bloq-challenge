@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Post } from "@nestjs/common";
 import {
   ApiBody,
   ApiOperation,
@@ -46,5 +46,16 @@ export class LockerController {
   @ApiBody({ type: LockerCreateDto })
   async create(@Body() lockerDto: LockerCreateDto): Promise<LockerResponseDto> {
     return await this.lockerService.create(lockerDto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: "List all lockers" })
+  @ApiResponse({
+    status: 200,
+    description: "List of all lockers",
+    type: [LockerResponseDto],
+  })
+  async findAll(): Promise<LockerResponseDto[]> {
+    return await this.lockerService.findAll();
   }
 }

@@ -1,4 +1,11 @@
-import { Body, Controller, HttpException, Patch, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  Patch,
+  Post,
+} from "@nestjs/common";
 import {
   ApiBody,
   ApiOperation,
@@ -48,5 +55,16 @@ export class BloqController {
     @Body() bloq: BloqUpdateDto,
   ): Promise<BloqResponseDto | HttpException> {
     return await this.bloqService.update(bloqId, bloq);
+  }
+
+  @Get()
+  @ApiOperation({ summary: "List all bloqs" })
+  @ApiResponse({
+    status: 200,
+    description: "List of all bloqs",
+    type: [BloqResponseDto],
+  })
+  async findAll(): Promise<BloqResponseDto[]> {
+    return await this.bloqService.findAll();
   }
 }

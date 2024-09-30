@@ -49,6 +49,22 @@ paths:
           description: Bad Request
       tags:
         - bloq
+  /bloq:
+    get:
+      operationId: BloqController_findAll
+      summary: List all bloqs
+      parameters: []
+      responses:
+        '200':
+          description: List of all bloqs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BloqResponseDto'
+      tags:
+        - bloq
   /locker/update/{lockerId}:
     patch:
       operationId: LockerController_update
@@ -96,6 +112,22 @@ paths:
                 $ref: '#/components/schemas/LockerResponseDto'
         '400':
           description: Bad Request
+      tags:
+        - locker
+  /locker:
+    get:
+      operationId: LockerController_findAll
+      summary: List all lockers
+      parameters: []
+      responses:
+        '200':
+          description: List of all lockers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LockerResponseDto'
       tags:
         - locker
   /rent/create:
@@ -162,6 +194,22 @@ paths:
           description: The rent has been successfully retrieved.
         '400':
           description: Bad Request
+      tags:
+        - rent
+  /rent:
+    get:
+      operationId: RentController_findAll
+      summary: List all rents
+      parameters: []
+      responses:
+        '200':
+          description: List of all rents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RentResponseDto'
       tags:
         - rent
 info:

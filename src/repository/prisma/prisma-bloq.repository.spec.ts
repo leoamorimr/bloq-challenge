@@ -28,6 +28,8 @@ describe("PrismaBloqRepository", () => {
         findUniqueOrThrow: jest.fn(),
         update: jest.fn(),
         create: jest.fn(),
+        findMany: jest.fn(),
+        findAll: jest.fn(),
       },
       writable: true,
     });
@@ -111,6 +113,27 @@ describe("PrismaBloqRepository", () => {
           address: bloq.address,
         },
       });
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of bloqs", async () => {
+      const bloqList: BloqEntity[] = [
+        {
+          id: "some-uuid-1",
+          title: "Test Title 1",
+          address: "Test Address 1",
+        },
+        {
+          id: "some-uuid-2",
+          title: "Test Title 2",
+          address: "Test Address 2",
+        },
+      ];
+      prismaService.bloq.findMany = jest.fn().mockResolvedValue(bloqList);
+
+      await repository.findAll();
+      expect(prismaService.bloq.findMany).toHaveBeenCalled();
     });
   });
 });

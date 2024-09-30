@@ -6,4 +6,5 @@ export abstract class RentRepository {
   abstract exists(rentId: string): Promise<boolean>;
   abstract update(rentId: string, rent: RentEntity): Promise<RentEntity>;
   abstract delete(rentId: string): Promise<void>;
+  abstract findAll(): Promise<RentEntity[]>;
 }

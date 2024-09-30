@@ -26,6 +26,7 @@ describe("PrismaLockerRepository", () => {
         findUnique: jest.fn(),
         findUniqueOrThrow: jest.fn(),
         update: jest.fn(),
+        findAll: jest.fn(),
       },
       writable: true,
     });
@@ -124,10 +125,21 @@ describe("PrismaLockerRepository", () => {
     it("should update a locker", async () => {
       prismaService.locker.update = jest.fn().mockResolvedValue(fakeLockEntity);
 
-      const { id, ...updateData } = fakeLockEntity;
+      const { ...updateData } = fakeLockEntity;
       const result = await repository.update(fakeUUID, updateData);
       expect(result).toEqual(fakeLockEntity);
       expect(prismaService.locker.update).toHaveBeenCalled();
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of lockers", async () => {
+      const lockerList = [fakeLockEntity];
+      prismaService.locker.findMany = jest.fn().mockResolvedValue(lockerList);
+
+      const result = await repository.findAll();
+      expect(result).toEqual(lockerList);
+      expect(prismaService.locker.findMany).toHaveBeenCalled();
     });
   });
 });

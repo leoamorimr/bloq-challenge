@@ -117,4 +117,9 @@ export class LockerService {
 
     return new LockerResponseDto(createdLocker);
   }
+
+  async findAll(): Promise<LockerResponseDto[]> {
+    const lockers: LockerEntity[] = await this.lockerRepository.findAll();
+    return lockers.map((locker) => new LockerResponseDto(locker));
+  }
 }

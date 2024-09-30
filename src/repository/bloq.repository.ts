@@ -5,4 +5,5 @@ export abstract class BloqRepository {
   abstract update(bloqId: string, bloq: BloqEntity): Promise<BloqEntity>;
   abstract findOne(bloqId: string): Promise<BloqEntity>;
   abstract findUniqueOrThrow(bloqId: string): Promise<BloqEntity>;
+  abstract findAll(): Promise<BloqEntity[]>;
 }

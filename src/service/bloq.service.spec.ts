@@ -30,6 +30,7 @@ describe("BloqService", () => {
             findOne: jest.fn(),
             update: jest.fn(),
             create: jest.fn(),
+            findAll: jest.fn(),
           },
         },
         {
@@ -115,6 +116,15 @@ describe("BloqService", () => {
         service.update(fakeUUID, fakeBloqRequestDto as BloqUpdateDto),
       ).rejects.toThrow(NotFoundException);
       expect(bloqRepository.findUniqueOrThrow).toHaveBeenCalledWith(fakeUUID);
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of bloqs", async () => {
+      bloqRepository.findAll.mockResolvedValue([fakeBloqEntity]);
+
+      await service.findAll();
+      expect(bloqRepository.findAll).toHaveBeenCalled();
     });
   });
 });

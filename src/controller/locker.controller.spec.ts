@@ -24,6 +24,7 @@ describe("LockerController", () => {
           useValue: {
             create: jest.fn(),
             update: jest.fn(),
+            findAll: jest.fn(),
           },
         },
       ],
@@ -82,6 +83,16 @@ describe("LockerController", () => {
       await expect(
         lockerController.update(lockerId, lockerUpdateDto),
       ).rejects.toThrow(httpException);
+    });
+  });
+
+  describe("findAll", () => {
+    it("should return an array of lockers", async () => {
+      const lockerList: LockerResponseDto[] = [fakeLockResponseDto];
+      jest.spyOn(lockerService, "findAll").mockResolvedValue(lockerList);
+
+      await lockerController.findAll();
+      expect(lockerService.findAll).toHaveBeenCalled();
     });
   });
 });
