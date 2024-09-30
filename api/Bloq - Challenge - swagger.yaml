@@ -187,9 +187,6 @@ components:
       required:
         - title
         - address
-    LockerResponseDto:
-      type: object
-      properties: {}
     BloqResponseDto:
       type: object
       properties:
@@ -215,6 +212,30 @@ components:
         - title
         - address
         - lockers
+    LockerResponseDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the locker
+          example: 123e4567-e89b-12d3-a456-426614174000
+        status:
+          type: string
+          description: Status of the locker
+          example: AVAILABLE
+        isOccupied:
+          type: boolean
+          description: Indicates if the locker is occupied
+          example: false
+        bloq:
+          description: Bloq associated with the locker
+          allOf:
+            - $ref: '#/components/schemas/BloqResponseDto'
+      required:
+        - id
+        - status
+        - isOccupied
+        - bloq
     BloqUpdateDto:
       type: object
       properties:
@@ -302,7 +323,65 @@ components:
         - status
     RentResponseDto:
       type: object
-      properties: {}
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the rent
+          example: 123e4567-e89b-12d3-a456-426614174000
+        weight:
+          type: number
+          description: Weight of the rent
+          example: 25.5
+        size:
+          type: string
+          description: Size of the rent
+          example: SMALL
+        status:
+          type: string
+          description: Status of the rent
+          example: CREATED
+          enum:
+            - CREATED
+            - WAITING_DROPOFF
+            - WAITING_PICKUP
+            - DELIVERED
+        locker:
+          description: Locker associated with the rent
+          allOf:
+            - $ref: '#/components/schemas/LockerResponseDto'
+      required:
+        - id
+        - weight
+        - size
+        - status
+        - locker
     RentUpdateDto:
       type: object
-      properties: {}
+      properties:
+        lockerId:
+          type: string
+          description: Unique identifier of the locker
+          example: 123e4567-e89b-12d3-a456-426614174000
+        weight:
+          type: number
+          description: Weight of the rent
+          example: 25.5
+        size:
+          type: string
+          description: Size of the rent
+          example: L
+          enum:
+            - XS
+            - S
+            - M
+            - L
+            - XL
+        status:
+          type: string
+          description: Status of the rent
+          example: CREATED
+          enum:
+            - CREATED
+            - WAITING_DROPOFF
+            - WAITING_PICKUP
+            - DELIVERED
