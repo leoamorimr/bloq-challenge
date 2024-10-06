@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { PrismaService } from "src/database/prisma.service";
 import { LockerStatus } from "src/model/enum/locker-status.enum";
 import { fakeLockEntity, fakeUUID } from "../../../test/mock/fake-locker";
-import { PrismaLockerRepository } from "./prisma-locker.repository";
+import { PrismaLockerRepository } from "../prisma-locker.repository";
 
 jest.mock("../../database/prisma.service");
 

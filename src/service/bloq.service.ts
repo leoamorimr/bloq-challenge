@@ -5,12 +5,12 @@ import { BloqCreateDto } from "src/model/dto/bloq-create.dto";
 import { BloqResponseDto } from "src/model/dto/bloq-response.dto";
 import { BloqUpdateDto } from "src/model/dto/bloq-update.dto";
 import { BloqEntity } from "src/model/entity/bloq.entity";
-import { BloqRepository } from "src/repository/bloq.repository";
+import { PrismaBloqRepository } from "../repository/prisma/prisma-bloq.repository";
 
 @Injectable()
 export class BloqService {
   constructor(
-    private readonly bloqRepository: BloqRepository,
+    private readonly bloqRepository: PrismaBloqRepository,
     private readonly logger: PinoLogger,
   ) {}
 
@@ -38,7 +38,7 @@ export class BloqService {
     const updatedBloq = await this.bloqRepository
       .update(bloqId, bloqEntity)
       .then(async () => {
-        return await this.bloqRepository.findOne(bloqId);
+        return await this.bloqRepository.findUnique(bloqId);
       });
 
     return new BloqResponseDto(updatedBloq);

@@ -11,13 +11,13 @@ import { RentCreateDto } from "src/model/dto/rent-create.dto";
 import { RentResponseDto } from "src/model/dto/rent-response.dto";
 import { RentUpdateDto } from "src/model/dto/rent-update.dto";
 import { RentEntity } from "src/model/entity/rent.entity";
-import { RentRepository } from "src/repository/rent.repository";
+import { PrismaRentRepository } from "../repository/prisma/prisma-rent.repository";
 import { LockerService } from "./locker.service";
 
 @Injectable()
 export class RentService {
   constructor(
-    private readonly rentRepository: RentRepository,
+    private readonly rentRepository: PrismaRentRepository,
     private readonly lockerService: LockerService,
     private readonly logger: PinoLogger,
   ) {}
@@ -57,7 +57,7 @@ export class RentService {
       .create(rentEntity)
       .then(async (rent) => {
         await this.lockerService.changeOccupied(rent.lockerId, true);
-        return await this.rentRepository.findOneOrThrow(rent.id);
+        return await this.rentRepository.findUniqueOrThrow(rent.id);
       })
       .catch((error) => {
         throw new InternalServerErrorException(
@@ -83,7 +83,7 @@ export class RentService {
     );
 
     const rentDb = await this.rentRepository
-      .findOneOrThrow(rentId)
+      .findUniqueOrThrow(rentId)
       .catch(() => {
         this.logger.error(`Rent with id ${rentId} not found`);
         throw new NotFoundException(`Rent not found`);
@@ -112,7 +112,7 @@ export class RentService {
       .update(rentId, updatedEntity)
       .then(async (rent) => {
         await this.lockerService.changeOccupied(rent.lockerId, true);
-        return await this.rentRepository.findOneOrThrow(rent.id);
+        return await this.rentRepository.findUniqueOrThrow(rent.id);
       })
       .catch((error) => {
         throw new InternalServerErrorException(
@@ -127,7 +127,7 @@ export class RentService {
   //Method reponsible to retrieve a rent by its id and update locker status
   async retrieve(rentId: string): Promise<object | HttpException> {
     const rentDb = await this.rentRepository
-      .findOneOrThrow(rentId)
+      .findUniqueOrThrow(rentId)
       .catch(() => {
         this.logger.error(`Rent with id ${rentId} not found`);
         throw new NotFoundException(`Rent not found`);

@@ -4,21 +4,17 @@ import { randomUUID } from "node:crypto";
 import { PrismaService } from "src/database/prisma.service";
 import { LockerEntity } from "src/model/entity/locker.entity";
 import { LockerStatus } from "src/model/enum/locker-status.enum";
-import { LockerRepository } from "../locker.repository";
+import { PrismaRepository } from "../prisma.repository";
 
 @Injectable()
-export class PrismaLockerRepository implements LockerRepository {
-  constructor(private readonly prisma: PrismaService) {}
+export class PrismaLockerRepository extends PrismaRepository<LockerEntity> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.locker);
+  }
 
   async create(locker: LockerEntity): Promise<LockerEntity> {
-    return await this.prisma.locker.create({
-      data: {
-        id: randomUUID(),
-        bloqId: locker.bloqId,
-        status: locker.status,
-        isOccupied: locker.isOccupied,
-      },
-    });
+    locker.id = randomUUID();
+    return await super.create(locker);
   }
 
   async exists(lockerId: string): Promise<boolean> {
@@ -54,7 +50,6 @@ export class PrismaLockerRepository implements LockerRepository {
     } else {
       data = {
         isOccupied: false,
-        status: LockerStatus.OPEN,
       };
     }
 
@@ -67,14 +62,7 @@ export class PrismaLockerRepository implements LockerRepository {
   }
 
   async findOneOrThrow(lockerId: string): Promise<LockerEntity> {
-    return await this.prisma.locker.findUniqueOrThrow({
-      where: {
-        id: lockerId,
-      },
-      include: {
-        bloq: true,
-      },
-    });
+    return await super.findUniqueOrThrow(lockerId, { include: { bloq: true } });
   }
 
   async update(lockerId: string, locker: LockerEntity): Promise<LockerEntity> {
@@ -86,18 +74,13 @@ export class PrismaLockerRepository implements LockerRepository {
         isOccupied: locker.isOccupied,
       },
       isNil,
-    );
+    ) as LockerEntity;
 
-    return await this.prisma.locker.update({
-      data,
-      where: {
-        id: lockerId,
-      },
-    });
+    return await super.update(lockerId, data);
   }
 
   async findAll(): Promise<LockerEntity[]> {
-    return await this.prisma.locker.findMany({
+    return await super.findAll({
       include: {
         bloq: true,
       },

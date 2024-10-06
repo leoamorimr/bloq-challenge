@@ -1,28 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { isNil, omitBy } from "lodash";
 import { randomUUID } from "node:crypto";
-import { PrismaService } from "src/database/prisma.service";
 import { BloqEntity } from "src/model/entity/bloq.entity";
-import { BloqRepository } from "src/repository/bloq.repository";
+import { PrismaService } from "../../database/prisma.service";
+import { PrismaRepository } from "../prisma.repository";
 
 @Injectable()
-export class PrismaBloqRepository implements BloqRepository {
-  constructor(private readonly prisma: PrismaService) {}
-
-  async findOne(bloqId: string): Promise<BloqEntity> {
-    return await this.prisma.bloq.findUnique({
-      where: {
-        id: bloqId,
-      },
-    });
-  }
-
-  async findUniqueOrThrow(bloqId: string): Promise<BloqEntity> {
-    return await this.prisma.bloq.findUniqueOrThrow({
-      where: {
-        id: bloqId,
-      },
-    });
+export class PrismaBloqRepository extends PrismaRepository<BloqEntity> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.bloq);
   }
 
   async update(bloqId: string, bloq: BloqEntity): Promise<BloqEntity> {
@@ -37,7 +23,7 @@ export class PrismaBloqRepository implements BloqRepository {
     return await this.prisma.bloq.update({
       data,
       where: {
-        id: bloq.id,
+        id: bloqId,
       },
     });
   }
@@ -50,9 +36,5 @@ export class PrismaBloqRepository implements BloqRepository {
         address: bloq.address,
       },
     });
-  }
-
-  async findAll(): Promise<BloqEntity[]> {
-    return await this.prisma.bloq.findMany();
   }
 }

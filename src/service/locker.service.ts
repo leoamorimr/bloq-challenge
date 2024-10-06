@@ -10,13 +10,13 @@ import { LockerResponseDto } from "src/model/dto/locker-response.dto";
 import { LockerUpdateDto } from "src/model/dto/locker-update.dto";
 import { LockerEntity } from "src/model/entity/locker.entity";
 import { LockerStatus } from "src/model/enum/locker-status.enum";
-import { LockerRepository } from "src/repository/locker.repository";
+import { PrismaLockerRepository } from "../repository/prisma/prisma-locker.repository";
 import { BloqService } from "./bloq.service";
 
 @Injectable()
 export class LockerService {
   constructor(
-    private readonly lockerRepository: LockerRepository,
+    private readonly lockerRepository: PrismaLockerRepository,
     private readonly bloqService: BloqService,
     private readonly logger: PinoLogger,
   ) {}

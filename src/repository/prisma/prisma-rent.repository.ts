@@ -1,14 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { isNil, omitBy } from "lodash";
 import { randomUUID } from "node:crypto";
-import {} from "prisma";
 import { PrismaService } from "src/database/prisma.service";
 import { RentEntity } from "src/model/entity/rent.entity";
-import { RentRepository } from "../rent.repository";
+import { PrismaRepository } from "../prisma.repository";
 
 @Injectable()
-export class PrismaRentRepository implements RentRepository {
-  constructor(private readonly prisma: PrismaService) {}
+export class PrismaRentRepository extends PrismaRepository<RentEntity> {
+  constructor(prisma: PrismaService) {
+    super(prisma, prisma.rent);
+  }
 
   async create(rent: RentEntity): Promise<RentEntity> {
     return await this.prisma.rent.create({
@@ -18,17 +19,6 @@ export class PrismaRentRepository implements RentRepository {
         weight: rent.weight,
         size: rent.size,
         status: rent.status,
-      },
-      include: {
-        locker: true,
-      },
-    });
-  }
-
-  async findOneOrThrow(rentId: string): Promise<RentEntity> {
-    return await this.prisma.rent.findUniqueOrThrow({
-      where: {
-        id: rentId,
       },
       include: {
         locker: true,
@@ -57,21 +47,17 @@ export class PrismaRentRepository implements RentRepository {
     return await this.prisma.rent.update({
       data,
       where: {
-        id: rent.id,
-      },
-    });
-  }
-
-  async delete(rentId: string): Promise<void> {
-    await this.prisma.rent.delete({
-      where: {
         id: rentId,
       },
     });
   }
 
+  async delete(rentId: string): Promise<void> {
+    await super.delete(rentId);
+  }
+
   async findAll(): Promise<RentEntity[]> {
-    return await this.prisma.rent.findMany({
+    return await super.findAll({
       include: {
         locker: true,
       },
