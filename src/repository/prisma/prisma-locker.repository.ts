@@ -54,7 +54,6 @@ export class PrismaLockerRepository implements LockerRepository {
     } else {
       data = {
         isOccupied: false,
-        status: LockerStatus.OPEN,
       };
     }
 
